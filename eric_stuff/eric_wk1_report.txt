@@ -1,0 +1,8 @@
+Eric Layne
+
+Milestone 1: sync to Jacob's gitlab and get proper permissions
+Milestone 2: take OpenGL tutorial
+Milestone 3: write simple program using OpenGL
+Milestone 4: reevaluate current project, come up with possible alternatives
+
+Tutorial: http://www.opengl-tutorial.org/beginners-tutorials/tutorial-1-opening-a-window/
