@@ -1,0 +1,166 @@
+Eric Layne
+
+------------------------------------------------------------------------------
+REPORT
+------------------------------------------------------------------------------
+Part 1:
+See additional compilation data below in MILESTONE 3.
+To compile helloworld.cpp:
+	enable X11 forwarding, Xming
+	g++ helloworld.cpp -o hello.exe -lglut
+Run with hello.exe
+
+Part 2:
+helloworld.cpp works simply.  The first #include gets the glut.h file 
+required to run the program with OpenGL.  The first function displayMe 
+creates what will be displayed in the graphics window.  I do not have a 
+great understanding of what occurs, but a rudimentary one.  glClear 
+clears the window to black.  glBegin draws a polygon using GL_POLYGON, in 
+this case a square, in three dimensions.  Each vertex is defined using 
+glVertex3f.  glEnd closes glBegin, and glFlush pushes this to the window.
+
+I am not sure what the main does with argc and argv.  I believe glutInit 
+is used to to initialize the GLUT library.  DisplayMode does what 
+the function is called, and GLUT_SINGLE creates a single buffered window.  
+I am unsure what buffered means in this case.  WindowSize, WindowPosition, 
+and CreateWindow are obvious, using input to define size, position, and the 
+window name.  DisplayFunc calls upon the previous function to be displayed 
+in the window.  MainLoop is used to enter the event processing loop, which 
+seems to be an unbreakable loop to process graphical information.
+
+TIME LOG (details logged below):
+Milestone 1: ~0.50 hours
+Milestone 2: ~2.00 hours
+Milestone 3: ~2.00 hours
+Milestone 4: ~0.25 hours
+-------------------------
+Total:	     4.75 hours
+
+Part 3:
+What I learned can be seen below in my log regarding each milestone.
+I only included one main tutorial site, but I combed the internet for 
+pertinent information.  It took quite some time to actually get to the 
+point of compiling files in milestone 3, as I needed to figure out many 
+things.  For example, I had to determine if OpenGL was even on the system,
+and I stumbled across glxgears and glxinfo to help with this.  Multiple 
+tutorials I tried did not reference GLUT, so they did not work, and 
+I honestly do not remember how I decided to search for GLUT.  The details 
+of this are included below, however.
+
+For milestone 3, I made a couple initial stabs to follow tutorials and 
+write code.  These were mostly unsuccessful, though, as I could not 
+figure out how to compile it, which led to me realizing to use X11 and
+Xming.  I eventually gave up writing, and downloaded a few sample codes 
+just so I could figure out how to compile these instead, and look at the 
+code structure itself.  It took a lot of trial and error to figure out 
+how to compile, but more importantly looking at the source code made me 
+realize the steep learning code to GLUT and OpenGL.  I wrote helloworld 
+after all of this, following closely a tutorial.  Unfortunately, the 
+tutorial was more of process than explanation for how things worked, 
+so I spent a lot of time researching different functions.  Due to the 
+difficulty of implementing helloworld, it further reinforces that OpenGL 
+is not the solution, and that a graphical project like this may be too 
+ambitious.
+
+Further assessment is below, in milestone 4.
+
+------------------------------------------------------------------------------
+LOG
+------------------------------------------------------------------------------
+Milestone 1: sync to Jacob's gitlab and get proper permissions
+Milestone 2: take OpenGL tutorial
+Milestone 3: write simple program using OpenGL
+Milestone 4: reevaluate current project, come up with possible alternatives
+______________________________________________________________________________
+Tutorial: https://www.badprog.com/c-opengl
+______________________________________________________________________________
+MILESTONE 1: sync to gitlab
+   Completed
+______________________________________________________________________________
+MILESTONE 2: OpenGL tutorial
+   Partially completed
+
+1. What I found to work:
+      Enable Xming
+      Command: glxgears
+         displays 3D gears properly
+      Command: glxinfo
+         displays graphics info
+            OpenGL seems to be installed already
+            Something called "MESA" seems to be pretty ubiquitous
+2. I need to check if GLUT is installed
+      Command: find /usr/include/ -name "glut.h"
+         found at /usr/include/GL/glut.h
+3. TO DO: find more in-depth tutorials to become more self-sufficient
+   and less reliant on others's code.
+_____________________________________________________________________________
+MILESTONE 3: simple program
+   Completed
+
+1. Downloaded abgr.c from opengl.org archived samples
+2. Need to be able to compile abgr.c
+      Test: cc abgr.c -lglut
+         FAILED
+      Test: gcc /usr/include/GL/glut.h abgr.c -lX11 -lm
+	 FAILED
+      Downloaded glut.h to folder
+      Test: gcc abgr.c -lX11 -lm
+	 FAILED - but seemed close, did not have references to many
+	 graphics library functions
+      Test: gcc abgr.c -o abgr -lGL -lGLU -lglut
+	 SUCCESS
+3. Quick test: does it work without glut.h saved locally?
+      YES it does
+      Removed glut.h from directory
+
+4. Downloaded dinospin.c from opengl.org archived samples
+5. Compiled dinospin.c, does it work?
+      FAILED, no support for trackball.h
+      Maybe an early mouse file?
+      No compilation information in file information
+6. Removed dinospin.c
+
+7. Downloaded dinoshade.c from opengl.org archived samples
+8. Compiled dinoshade.c using info in file
+      SUCCESS
+      Throws up a ton of warnings
+      Runs agonizingly slowly
+
+9. Wrote simple hello world program based on tutorial website
+   shown above
+10. Compile with g++ helloworld.cpp -o hello -lglut
+______________________________________________________________________________
+MILESTONE 4: Assess
+   Completed
+
+I was able to complete all four milestones to a satisfactory result.
+
+The first milestone was simple.
+
+The second milestone was more complex.  I had to go through many 
+tutorials before finding one that was even remotely helpful.  
+The first tutorial I tried, for example, did not use GLUT, which 
+is what Notre Dame has for OpenGL, as far as I know.  In order to find 
+that ND uses GLUT, it took a lot of trial and error, as well as many 
+other tutorials.  In the end, I found a semi-satisfactory tutorial, 
+listed above, as well as sample programs from opengl's archives.  
+Using this tutorial, I was able to write a hello world program 
+that makes some sense to me yet remains difficult to grasp.  
+Further advancement through the tutorial would reveal a steep 
+learning curve.  Additionally, it took a lot of research/guesswork 
+to find out that I needed to enable X11 and Xming.
+
+The third milestone was more fun.  I had to figure out how to compile 
+the two sample programs I had, and followed the tutorial to write the 
+hello world program.  The steps I took are detailed above.  The 
+details of hello world are defined elsewhere in this document.
+
+This is the fourth milestone, my assessment.  Ultimately, while I was 
+able to get a rudimentary understanding of OpenGL and GLUT, and implement 
+a few simple things, I believe that it is too difficult to learn and use 
+for our project.  Based on the source code to the 3D dinosaur code, 
+it seems very unrealistic to think that we will be able to learn how to 
+code in 3D.  We will need to change our project in some way, whether it 
+is simplified or totally rehauled.  This assessment, that we need to 
+rehaul our project is a sentiment shared among my group, though we 
+arrived at this conclusion through semi-different avenues.
