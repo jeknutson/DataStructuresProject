@@ -33,18 +33,18 @@ vel_y = 0
 # Power bar
 def progress(direction, p_xcord):
 	if direction > 1 and p_xcord < 100:
-		p_xcord = p_xcord+4
+		p_xcord = p_xcord+8
 	elif direction < 1 and p_xcord > 0:
-		p_xcord = p_xcord-4
+		p_xcord = p_xcord-8
 	pygame.draw.rect(screen, p_color, pygame.Rect(30, 550, 30+p_xcord, 30))
 	return p_xcord
 
 def rotatearrow(direction):
 	global arrow_x,arrow_y,arrow_angle
 	if direction > 0:
-		arrow_angle = arrow_angle + math.radians(-5)
+		arrow_angle = arrow_angle + math.radians(-10)
 	elif direction < 0:
-		arrow_angle = arrow_angle + math.radians(5)
+		arrow_angle = arrow_angle + math.radians(10)
 	x = arrow_x + arrow_r*math.cos(arrow_angle)
 	y = arrow_y - arrow_r*math.sin(arrow_angle)
 	pygame.draw.aaline(screen, (255,0,0),(arrow_x,arrow_y), (x,y))
@@ -52,7 +52,7 @@ def rotatearrow(direction):
 # Ball movement
 def moveball(color, new_x, new_y):
 	#screen.blit(ball, (new_x, new_y))
-	screen.fill((255, 255, 255))
+	#screen.fill((255, 255, 255))
 	time.sleep(.04)
 	#global ball_color, ball_radius, ball_thickness
 	pygame.display.update(pygame.draw.circle(screen, color, (int(new_x), int(new_y)), ball_r, ball_t))
@@ -64,17 +64,29 @@ def hitball(angle, velocity):
 	global ball_x, ball_y
 	pos_x = ball_x
 	pos_y = ball_y
-	dt = t / 50
+	dt = t / 500
 	while dt < t:
 		vel_x = velocity * math.cos(angle)
 		vel_y = velocity * math.sin(angle) * -1
 		moveball(white, pos_x, pos_y)
 		pos_x = ball_x + vel_x*dt
 		pos_y = ball_y + vel_y*dt + 4.9*dt*dt
-		print(pos_y)
+		#print(pos_x)
 		dt = dt + dt
 		screen.fill((255, 255, 255))
 		moveball(ball_c, pos_x, pos_y)
+	
+		# Hit a wall
+		if pos_x > 1050:
+			vel_x = -vel_x
+			pos_x -= 5
+		elif pos_y < 0:
+			vel_y = -vel_y
+			pos_y += 5
+		elif pos_x < 5:
+			vel_x = -vel_x
+			pos_x += 5
+
 	moveball(white, pos_x, pos_y)
 	pos_x = ball_x + vel_x*t
 	pos_y = ball_y + vel_y*t + 4.9*t*t
