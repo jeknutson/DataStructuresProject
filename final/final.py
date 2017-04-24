@@ -23,12 +23,11 @@ arrow_x = 30
 arrow_y = 100
 arrow_r = 20
 
-ball_r = 5
-ball_c = (0, 255, 0)
-white = (255, 255, 255)
+ball_r = 3
+ball_c = white
 ball_t = 0
-ball_x = 30
-ball_y = 500
+ball_x = 25
+ball_y = height/2
 vel_x = 30
 vel_y = 0
 
@@ -49,7 +48,7 @@ def rotatearrow(direction):
 		arrow_angle = arrow_angle + math.radians(10)
 	x = arrow_x + arrow_r*math.cos(arrow_angle)
 	y = arrow_y - arrow_r*math.sin(arrow_angle)
-	pygame.draw.aaline(screen, (255,0,0),(arrow_x,arrow_y), (x,y))
+	pygame.draw.aaline(screen, (250, 250, 15),(arrow_x,arrow_y), (x,y))
 
 def midpt_disp(start, end, roughness, v_d = None, num_i = 16):
 	if v_d is None:
@@ -66,11 +65,31 @@ def midpt_disp(start, end, roughness, v_d = None, num_i = 16):
 		iteration = iteration + 1
 	return points
 
-# Ball movement
+line = midpt_disp([0+50, height/2], [width-50, height/2], 2.0, 200, 12)
+#line2 = midpt_disp([0+50, height/2], [width-50, height/2], 2.0, 250, 12)
+#for i in range(len(line)):
+#	print((line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))	
+
+def line_data():
+	global line
+	data = []
+	for i in range(50):
+		data.append(height/2)
+	x = 0
+	for i in range(width-100):
+		while (i+50) != int(line[x][0]):
+			x = x + 1
+		data.append(int(line[x][1]))
+	for i in range(50):
+		data.append(height/2)
+	return data
+
+
+#Ball movement
 def moveball(color, new_x, new_y):
 	#screen.blit(ball, (new_x, new_y))
 	#screen.fill((255, 255, 255))
-	time.sleep(.04)
+	time.sleep(.1)
 	#global ball_color, ball_radius, ball_thickness
 	pygame.display.update(pygame.draw.circle(screen, color, (int(new_x), int(new_y)), ball_r, ball_t))
 
@@ -78,57 +97,53 @@ def hitball(angle, velocity):
 	vel_y = velocity * math.sin(angle)
 	vel_x = velocity * math.cos(angle)
 	t = (vel_y / 9.8)* 2
-	global ball_x, ball_y
+	global ball_x, ball_y, data
 	pos_x = ball_x
 	pos_y = ball_y
-	dt = t / 500
+	dt = t / 50
 	while dt < t:
+#	while pos_y <= data[int(pos_x)]:
 		vel_x = velocity * math.cos(angle)
 		vel_y = velocity * math.sin(angle) * -1
-		moveball(white, pos_x, pos_y)
+		moveball(black, pos_x, pos_y)
 		pos_x = ball_x + vel_x*dt
 		pos_y = ball_y + vel_y*dt + 4.9*dt*dt
 		#print(pos_x)
 		dt = dt + dt
-		screen.fill((255, 255, 255))
-		moveball(ball_c, pos_x, pos_y)
-	
+		moveball(ball_c, pos_x, pos_y)	
+
 		# Hit a wall
-		if pos_x > 1050:
+		if pos_x >= width:
 			vel_x = -vel_x
 			pos_x -= 5
-		elif pos_y < 0:
+		if pos_y <= 0:
 			vel_y = -vel_y
 			pos_y += 5
-		elif pos_x < 5:
+		if pos_x <= 5:
 			vel_x = -vel_x
 			pos_x += 5
-
-	moveball(white, pos_x, pos_y)
-	pos_x = ball_x + vel_x*t
-	pos_y = ball_y + vel_y*t + 4.9*t*t
-	moveball(ball_c, pos_x, pos_y)
+	
+#	moveball(black, pos_x, pos_y)
+#	pos_x = ball_x + vel_x*t
+#	pos_y = ball_y + vel_y*t + 4.9*t*t
+#	moveball(ball_c, pos_x, pos_y)
 	ball_x = pos_x
-	ball_y = pos_y
-
-
-line = midpt_disp([0+50, height/2], [width-50, height/2], 1.4, 20, 12)
-line2 = midpt_disp([0+50, height/2], [width-50, height/2], 2.0, 250, 12)
-for i in range(len(line)):
-	print((line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))
-
+	ball_y = data[int(pos_x)]
+#	moveball(ball_c, ball_x, ball_y)
+	print(ball_x, ball_y)
 
 # Main loop
 it = 0
+data = line_data()
 while running:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			pygame.quit()
 			running = 0
 		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_m:
+			if event.key == pygame.K_UP:
 				p_xcord = progress(2, p_xcord)
-			if event.key == pygame.K_n:
+			if event.key == pygame.K_DOWN:
 				p_xcord = progress(0, p_xcord)
 			if event.key == pygame.K_SPACE:
 				hitball(arrow_angle, p_xcord) 
@@ -148,25 +163,21 @@ while running:
 	i = 1
 	while i < (len(line)):
 		pygame.draw.aaline(screen, green, (line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))
-		pygame.draw.aaline(screen, blue, (line2[i-1][0],line2[i-1][1]),(line2[i][0], line2[i][1]))	
+#		print((line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]))	
+#		pygame.draw.aaline(screen, blue, (line2[i-1][0],line2[i-1][1]),(line2[i][0], line2[i][1]))	
 		i = i + 1
-
-	it = it + 1
-
-
 		
-	#screen.fill((255, 255, 255))
 	moveball(ball_c, ball_x, ball_y)
 
 	arrow_x = ball_x 
 	arrow_y = ball_y
 	x = arrow_x + arrow_r*math.cos(arrow_angle)
 	y = arrow_y - arrow_r*math.sin(arrow_angle)
-	pygame.draw.aaline(screen, (255,0,0),(arrow_x,arrow_y), (x,y))
-	
+	pygame.draw.aaline(screen, (250,250,15),(arrow_x,arrow_y), (x,y))
 	
 	#Draw power bar
-	pygame.draw.rect(screen, (0,0,0), pygame.Rect(30,550,132,30))
+	pygame.draw.rect(screen, white, pygame.Rect(30,550,132,30))
 	pygame.draw.rect(screen, p_color, pygame.Rect(30,550,30+p_xcord,30))
 	
+	it = it + 1
 	pygame.display.flip()
