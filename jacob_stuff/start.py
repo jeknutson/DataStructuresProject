@@ -6,19 +6,20 @@ from time import sleep
 pygame.init()
 pygame.display.list_modes()
 screen = pygame.display.set_mode((1200, 600))
-arrow = pygame.image.load("arrow.png")
-arrow_angle = 90
-arrow_width = int (180 / 5)
-arrow_length = int (130 / 5)
-arrow = pygame.transform.scale(arrow, (arrow_width, arrow_length))
+#arrow = pygame.image.load("arrow.png")
+arrow_angle = math.radians(90)
+#arrow_width = int (180 / 5)
+#arrow_length = int (130 / 5)
+#arrow = pygame.transform.scale(arrow, (arrow_width, arrow_length))
 clock = pygame.time.Clock()
-arrow = pygame.transform.rotate(arrow, arrow_angle)
+#arrow = pygame.transform.rotate(arrow, arrow_angle)
 done = False
 
 p_color = (255, 0, 0)
 p_xcord = 30
 arrow_x = 30
 arrow_y = 100
+arrow_r = 20
 
 ball_r = 5
 ball_c = (0, 0, 0)
@@ -39,13 +40,15 @@ def progress(direction, p_xcord):
 	return p_xcord
 
 def rotatearrow(direction):
-	global arrow
+	global arrow_x,arrow_y,arrow_angle
 	if direction > 0:
-		angle = 1
+		arrow_angle = arrow_angle + math.radians(-5)
 	elif direction < 0:
-		angle = -1
-	arrow = pygame.transform.rotate(arrow, angle)
-
+		arrow_angle = arrow_angle + math.radians(5)
+	x = arrow_x + arrow_r*math.cos(arrow_angle)
+	y = arrow_y - arrow_r*math.sin(arrow_angle)
+	pygame.draw.aaline(screen, (255,0,0),(arrow_x,arrow_y), (x,y))
+	
 # Ball movement
 def moveball(color, new_x, new_y):
 	#screen.blit(ball, (new_x, new_y))
@@ -91,7 +94,7 @@ while not done:
 			if event.key == pygame.K_n:
 				p_xcord = progress(0, p_xcord)
 			if event.key == pygame.K_SPACE:
-				hitball(math.radians(45), p_xcord) 
+				hitball(arrow_angle, p_xcord) 
 			if event.key == pygame.K_RIGHT:
 				rotatearrow(1)
 			if event.key == pygame.K_LEFT:
@@ -101,18 +104,16 @@ while not done:
 	screen.fill((255, 255, 255))
 	moveball(ball_c, ball_x, ball_y)
 
-	arrow_x = ball_x - 14 
-	arrow_y = ball_y - 44
-	screen.blit(arrow, (arrow_x, arrow_y))
+	arrow_x = ball_x 
+	arrow_y = ball_y
+	x = arrow_x + arrow_r*math.cos(arrow_angle)
+	y = arrow_y - arrow_r*math.sin(arrow_angle)
+	pygame.draw.aaline(screen, (255,0,0),(arrow_x,arrow_y), (x,y))
+	
 	
 	#Draw power bar
 	pygame.draw.rect(screen, (0,0,0), pygame.Rect(30,550,132,30))
 	pygame.draw.rect(screen, p_color, pygame.Rect(30,550,30+p_xcord,30))
 	
-	keys = python.key.get_pressed()
-	if keys[python.K_RIGHT]:
-		rotatearrow(1)
-	if keys[python.K_LEFT]:
-		rotatearrow(-1)
 	pygame.display.flip()
 	clock.tick(60)
