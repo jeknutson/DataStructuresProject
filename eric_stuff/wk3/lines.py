@@ -8,11 +8,13 @@ import bisect
 
 #pygame.init()
 
-size = width, height = 640, 400
+size = width, height = 1200, 600
 
 screen = pygame.display.set_mode(size)
 running = 1
 black = 0, 0, 0
+white = 255, 255, 255
+red = 255, 0, 0
 blue = 0, 0, 255
 green = 0, 255, 0
 
@@ -34,16 +36,19 @@ def midpt_disp(start, end, roughness, v_d = None, num_i = 16):
 	if v_d is None:
 		v_d = (start[1]+end[1])/2
 	points = [start, end]
-	i = 1
-	while i <= num_i:
+	iteration = 1
+	while iteration <= num_i:
 		points_tup = tuple(points)
 		for i in range(len(points_tup)-1):
 			midpt = list(map(lambda x: (points_tup[i][x]+points_tup[i+1][x])/2, [0, 1]))
 			midpt[1] = midpt[1] + random.choice([-v_d, v_d])
 			bisect.insort(points, midpt)
 		v_d *= 2 ** (-roughness)
-		i = i + 1
+		iteration = iteration + 1
 	return points
+
+line = midpt_disp([0+50, height/2], [width-50, height/2], 1.4, 20, 12)
+line2 = midpt_disp([0+50, height/2], [width-50, height/2], 0.5, 20, 12)
 
 while running:
 	event = pygame.event.poll()
@@ -52,14 +57,14 @@ while running:
 
 	screen.fill(black)
 
-	pygame.draw.aaline(screen, blue, (0,height/2), (width, height/2))
-	line = midpt_disp([0, height/2], [width, height/2], 1.4, 20, 12)
-#	draw_lines(line, width, height)
+	pygame.draw.aaline(screen, white, (0,height/2), (width, height/2))
+
 	i = 1
 	while i < (len(line)):
 		pygame.draw.aaline(screen, green, (line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))
+		pygame.draw.aaline(screen, red, (line2[i-1][0],line2[i-1][1]),(line2[i][0], line2[i][1]))
+#		print((line2[i-1][0],line2[i-1][1]),(line2[i][0], line2[i][1]))
+		
 		i = i + 1
-#	for x in line:
-#		print(x[0], x[1])
 
 	pygame.display.flip()
