@@ -65,7 +65,7 @@ def midpt_disp(start, end, roughness, v_d = None, num_i = 16):
 		iteration = iteration + 1
 	return points
 
-line = midpt_disp([0+50, height/2], [width-50, height/2], 2.0, 200, 12)
+line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 200, 12)
 #line2 = midpt_disp([0+50, height/2], [width-50, height/2], 2.0, 250, 12)
 #for i in range(len(line)):
 #	print((line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))	

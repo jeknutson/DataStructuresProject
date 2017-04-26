@@ -47,10 +47,17 @@ def midpt_disp(start, end, roughness, v_d = None, num_i = 16):
 		iteration = iteration + 1
 	return points
 
-line = midpt_disp([0+50, height/2], [width-50, height/2], 1.4, 20, 12)
-line2 = midpt_disp([0+50, height/2], [width-50, height/2], 2.0, 250, 12)
+line = midpt_disp([0+50, 2*height/3], [width-50, 2*height/3], 1.8, 50, 12)
+line2 = midpt_disp([0, 2*height/3], [width, 2*height/3], 1.0, 300, 12)
+line3 = midpt_disp([0, 2*height/3], [width, 2*height/3], 1.0, 150, 12)
 #for i in range(len(line)):
 #	print((line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))
+
+def draw_fill(line, color):
+	i = 1
+	while i < (len(line)):
+		pygame.draw.aaline(screen, color, (line[i-1][0],line[i-1][1]), (line[i-1][0],height))
+		i = i + 1
 
 it = 0
 while running:
@@ -58,20 +65,30 @@ while running:
 	if event.type == pygame.QUIT:
 		running = 0
 
-	screen.fill(black)
+	screen.fill((27,128,186))
 
 #	pygame.draw.line(screen, white, (0,height/2), (width, height/2))
-	pygame.draw.line(screen, green, (0, height/2), (50, height/2))
-	pygame.draw.line(screen, green, (width-50, height/2), (width, height/2))
-	pygame.draw.ellipse(screen, (20,70,15), [width-33, height/2-4, 16, 8])
-	pygame.draw.line(screen, (200,200,200), (width-25, height/2), (width-25, height/2-20))
-	pygame.draw.polygon(screen, red, [[width-25, height/2-20],[width-25, height/2-15],[width-35, height/2-18+(it%3)]])
+#	pygame.draw.line(screen, green, (0, 2*height/3), (50, 2*height/3))
+#	pygame.draw.line(screen, green, (width-50, 2*height/3), (width, 2*height/3))
 
-	i = 1
-	while i < (len(line)):
-		pygame.draw.aaline(screen, green, (line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))
-		pygame.draw.aaline(screen, blue, (line2[i-1][0],line2[i-1][1]),(line2[i][0], line2[i][1]))	
-		i = i + 1
+#	pygame.draw.ellipse(screen, (20,70,15), [width-33, height/2-4, 16, 8])
+#	pygame.draw.line(screen, (200,200,200), (width-25, height/2), (width-25, height/2-20))
+#	pygame.draw.polygon(screen, red, [[width-25, height/2-20],[width-25, height/2-15],[width-35, height/2-18+(it%3)]])
+
+#	i = 1
+#	while i < (len(line)):
+##		pygame.draw.aaline(screen, green, (line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))
+#		pygame.draw.aaline(screen, (35,86,28), (line3[i-1][0],line3[i-1][1]),(line3[i-1][0],height))
+##		pygame.draw.aaline(screen, green, (line[i-1][0],line[i-1][1]),(line[i-1][0],height))
+#		i = i + 1
+
+	draw_fill(line2, (100,100,100))
+	draw_fill(line3, (35,86,28))
+	draw_fill(line, green)
+
+	for val in range(50):
+		pygame.draw.aaline(screen, green, (val, 2*height/3), (val, height))
+		pygame.draw.aaline(screen, green, (width-val-1, 2*height/3), (width-val-1, height))
 
 	it = it + 1
 	pygame.display.flip()
