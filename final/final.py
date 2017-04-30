@@ -73,6 +73,7 @@ line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 200, 12)
 def line_data():
 	global line
 	data = []
+	data.append(height/2)
 	for i in range(50):
 		data.append(height/2)
 	x = 0
@@ -87,41 +88,53 @@ def line_data():
 
 #Ball movement
 def moveball(color, new_x, new_y):
-	#screen.blit(ball, (new_x, new_y))
-	#screen.fill((255, 255, 255))
 	time.sleep(.1)
-	#global ball_color, ball_radius, ball_thickness
 	pygame.display.update(pygame.draw.circle(screen, color, (int(new_x), int(new_y)), ball_r, ball_t))
 
 def hitball(angle, velocity):
 	vel_y = velocity * math.sin(angle)
+	print (vel_y)
 	vel_x = velocity * math.cos(angle)
 	t = (vel_y / 9.8)* 2
 	global ball_x, ball_y, data
 	pos_x = ball_x
 	pos_y = ball_y
-	dt = t / 50
-	while dt < t:
-#	while pos_y <= data[int(pos_x)]:
-		vel_x = velocity * math.cos(angle)
-		vel_y = velocity * math.sin(angle) * -1
-		moveball(black, pos_x, pos_y)
-		pos_x = ball_x + vel_x*dt
-		pos_y = ball_y + vel_y*dt + 4.9*dt*dt
-		#print(pos_x)
-		dt = dt + dt
-		moveball(ball_c, pos_x, pos_y)	
+	dt = t / 30
+	dt_total = dt
+	vel_y = vel_y * -1
+#	while dt_total < t:
+	while vel_y < -7:
+		while pos_y <= data[int(pos_x)]:
+			#vel_x = velocity * math.cos(angle)
+			vel_y = vel_y + (4.9)*dt
+			#moveball(black, pos_x, pos_y)
+			pos_x = pos_x + vel_x*dt
+			#pos_y = ball_y + vel_y*dt_total + 4.9*dt_total*dt_total
+			pos_y = pos_y + vel_y*dt
 
-		# Hit a wall
-		if pos_x >= width:
-			vel_x = -vel_x
-			pos_x -= 5
-		if pos_y <= 0:
-			vel_y = -vel_y
-			pos_y += 5
-		if pos_x <= 5:
-			vel_x = -vel_x
-			pos_x += 5
+			# Hit a wall
+			if pos_x > width:
+				vel_x = -vel_x
+				pos_x = width - 1
+			#if pos_y <= 0:
+			#	vel_y = -vel_y
+			#	pos_y = 1
+			if pos_x < 1:
+				vel_x = -vel_x
+				pos_x = 1	
+
+			#print(pos_x)
+
+			dt_total += dt
+			moveball(ball_c, pos_x, pos_y)	
+
+		pos_y = data[int(pos_x)]
+		velocity = velocity * .5
+		vel_y = velocity * math.sin(angle)
+		t = (vel_y / 9.8) * 2
+		dt = t / 30
+		dt_total = dt
+		vel_y = vel_y * -1
 	
 #	moveball(black, pos_x, pos_y)
 #	pos_x = ball_x + vel_x*t
@@ -152,7 +165,7 @@ while running:
 			if event.key == pygame.K_LEFT:
 				rotatearrow(-1)
 
-	screen.fill(black)
+	#screen.fill(black)
 
 	pygame.draw.line(screen, green, (0, height/2), (50, height/2))
 	pygame.draw.line(screen, green, (width-50, height/2), (width, height/2))
