@@ -102,14 +102,13 @@ def hitball(angle, velocity):
 	dt = t / 30
 	dt_total = dt
 	vel_y = vel_y * -1
-#	while dt_total < t:
+	# Ball is moving fast enough to move
 	while vel_y < -7:
+		# Run until the ball hits the ground
 		while pos_y <= data[int(pos_x)]:
-			#vel_x = velocity * math.cos(angle)
 			vel_y = vel_y + (4.9)*dt
 			#moveball(black, pos_x, pos_y)
 			pos_x = pos_x + vel_x*dt
-			#pos_y = ball_y + vel_y*dt_total + 4.9*dt_total*dt_total
 			pos_y = pos_y + vel_y*dt
 
 			# Hit a wall
@@ -128,6 +127,7 @@ def hitball(angle, velocity):
 			dt_total += dt
 			moveball(ball_c, pos_x, pos_y)	
 
+		# Bouncing
 		pos_y = data[int(pos_x)]
 		velocity = velocity * .5
 		vel_y = velocity * math.sin(angle)
