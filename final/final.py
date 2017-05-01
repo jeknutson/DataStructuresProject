@@ -129,6 +129,8 @@ def hitball(angle, velocity):
 
 		# Bouncing
 		dt_total -= 2* dt
+		pos_y = data[int(pos_x)] #data is ground data
+		dt_total -= 2 * dt
 		if pos_x >= 1 and pos_x <= width:
 			pos_x = ball_x + vel_x*dt_total
 		pos_y = data[int(pos_x)]
