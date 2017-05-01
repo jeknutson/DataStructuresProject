@@ -128,7 +128,7 @@ def hitball(angle, velocity):
 			moveball(ball_c, pos_x, pos_y)	
 
 		# Bouncing
-		pos_y = data[int(pos_x)]
+		pos_y = data[int(pos_x)] #data is ground data
 		velocity = velocity * .5
 		vel_y = velocity * math.sin(angle)
 		t = (vel_y / 9.8) * 2
