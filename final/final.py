@@ -128,12 +128,16 @@ def hitball(angle, velocity):
 			moveball(ball_c, pos_x, pos_y)	
 
 		# Bouncing
-		dt_total -= 2* dt
-		pos_y = data[int(pos_x)] #data is ground data
 		dt_total -= 2 * dt
 		if pos_x >= 1 and pos_x <= width:
-			pos_x = ball_x + vel_x*dt_total
-		pos_y = data[int(pos_x)]
+			pos_x = pos_x - (vel_x*dt)
+		pos_y = data[int(pos_x)] #data is ground data
+
+		# Calculate the bounce angle
+		#incoming_x1 = ball_x + vel_x*(dt_total-dt)
+		#incoming_x2 = pos_x
+		#angle_incomingball = 
+	
 		velocity = velocity * .5
 		vel_y = velocity * math.sin(angle)
 		t = (vel_y / 9.8) * 2
@@ -142,7 +146,6 @@ def hitball(angle, velocity):
 		vel_y = vel_y * -1
 		ball_x = pos_x
 		ball_y = pos_y
-	
 #	moveball(black, pos_x, pos_y)
 #	pos_x = ball_x + vel_x*t
 #	pos_y = ball_y + vel_y*t + 4.9*t*t
