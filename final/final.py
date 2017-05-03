@@ -157,7 +157,7 @@ def hitball(angle, velocity):
 		inco_x = pos_x - (vel_x*dt)
 		inco_y = pos_y - (vel_y*dt)
 		gd_x = pos_x - 2
-		gd_y = data[int(gd_x1)]
+		gd_y = data[int(gd_x)]
 		a = math.sqrt(math.pow(inco_x - pos_x, 2) + math.pow(inco_y - pos_y, 2))
 
 		pygame.draw.aaline(screen, red, (inco_x, inco_y), (pos_x, pos_y))
