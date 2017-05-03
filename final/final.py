@@ -142,7 +142,12 @@ def hitball(angle, velocity):
 		inco_y1 = pos_y - (vel_y*dt)
 		inco_x2 = pos_x
 		inco_y2 = pos_y
-		inco_slope = (inco_x2-inco_x1)
+		gd_x1 = pos_x - 2
+		gd_y1 = data[int(gd_x1)]
+		gd_x2 = pos_x + 2
+		gd_y2 = data[int(gd_x2)]
+		gd_slope = (gd_y2-gd_y1)/gd_x2-gd_x1
+		gd_norm = -1 / gd_slope
 		#angle_incomingball = 
 	
 		velocity = velocity * 0.3
