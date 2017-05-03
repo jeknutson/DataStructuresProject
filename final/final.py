@@ -154,14 +154,15 @@ def hitball(angle, velocity):
 		pos_y = data[int(pos_x)] #data is ground data
 
 		# Calculate the bounce angle
-		inco_x1 = pos_x - (vel_x*dt)
-		inco_y1 = pos_y - (vel_y*dt)
-		inco_x2 = pos_x
-		inco_y2 = pos_y
-		gd_x1 = pos_x - 2
-		gd_y1 = data[int(gd_x1)]
-		gd_x2 = pos_x + 2
-		gd_y2 = data[int(gd_x2)]
+		inco_x = pos_x - (vel_x*dt)
+		inco_y = pos_y - (vel_y*dt)
+		gd_x = pos_x - 2
+		gd_y = data[int(gd_x1)]
+		a = math.sqrt(math.pow(inco_x - pos_x, 2) + math.pow(inco_y - pos_y, 2))
+		b = math.sqrt(math.pow(gd_x - pos_x, 2) + math.pow(gd_y - pos_y, 2))
+		c = math.sqrt(math.pow(inco_x - gd_x, 2) + math.pow(inco_y - gd_y, 2))
+		theta = math.acos((a*a + b*b - c*c)/(2*a*b))
+		angle = -1*theta + math.pi
 		#angle_incomingball = 
 	
 		velocity = velocity * 0.3
