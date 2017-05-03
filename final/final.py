@@ -103,7 +103,7 @@ def hitball(angle, velocity):
 	dt_total = dt
 	vel_y = vel_y * -1
 	# Ball is moving fast enough to move
-	while vel_y < -7:
+	while vel_y < -4:
 		# Run until the ball hits the ground
 		#while pos_y <= data[int(pos_x)]+2 and pos_y>=data[int(pos_x)]-2 or pos_y >= data[int(pos_x)]:
 		#while pos_y >= data[int(pos_x)]-6 and pos_y <= data[int(pos_x)]+6 or pos_y <= data[int(pos_x)]:
@@ -145,7 +145,7 @@ def hitball(angle, velocity):
 		inco_slope = (inco_x2-inco_x1)
 		#angle_incomingball = 
 	
-		velocity = velocity * 0.5
+		velocity = velocity * 0.3
 		vel_y = velocity * math.sin(angle)
 		t = (vel_y / 9.8) * 2
 		#dt = dt
