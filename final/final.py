@@ -99,7 +99,7 @@ def hitball(angle, velocity):
 	global ball_x, ball_y, data
 	pos_x = ball_x
 	pos_y = ball_y
-	dt = t / 50
+	dt = t / 100
 	dt_total = dt
 	vel_y = vel_y * -1
 	# Ball is moving fast enough to move
