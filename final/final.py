@@ -4,6 +4,8 @@ import sys, pygame, os, math, time, random, bisect
 
 pygame.init()
 pygame.display.list_modes()
+myfont = pygame.font.SysFont("monospace", 15)
+
 screen = pygame.display.set_mode((1200, 600))
 arrow_angle = math.radians(90)
 clock = pygame.time.Clock()
@@ -16,6 +18,8 @@ white = 255, 255, 255
 red = 255, 0, 0
 blue = 0, 0, 255
 green = 0, 255, 0
+gameplay = 0
+hits = 0
 
 p_color = (255, 0, 0)
 p_xcord = 30
@@ -30,6 +34,12 @@ ball_x = 25
 ball_y = height/2
 vel_x = 30
 vel_y = 0
+
+flag_topx = width-33
+flag_topy = height/2-4
+flag_w = 16
+flag_h = 8
+score = []
 
 # Power bar
 def progress(direction, p_xcord):
@@ -131,6 +141,12 @@ def hitball(angle, velocity):
 				break
 			moveball(ball_c, pos_x, pos_y)	
 
+			#ball hits flag
+			if pos_x > flag_topx and pos_x < flag_topx + flag_w:
+				if pos_y > flag_topy and pos_y < flag_topy + flag_h:
+					return 1;
+					break
+
 		# Bouncing
 		dt_total = dt_total - 2*dt
 		if pos_x >= 1 and pos_x <= width:
@@ -162,52 +178,82 @@ def hitball(angle, velocity):
 #	moveball(ball_c, ball_x, ball_y)
 	print(ball_x, ball_y)
 
+	# ball has not made it into the hole
+	return 0;
+
 # Main loop
 it = 0
+playing = True
 data = line_data()
-while running:
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			pygame.quit()
-			running = 0
-		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_UP:
-				p_xcord = progress(2, p_xcord)
-			if event.key == pygame.K_DOWN:
-				p_xcord = progress(0, p_xcord)
-			if event.key == pygame.K_SPACE:
-				hitball(arrow_angle, p_xcord) 
-			if event.key == pygame.K_RIGHT:
-				rotatearrow(1)
-			if event.key == pygame.K_LEFT:
-				rotatearrow(-1)
+for holenumber in range(9):
+	while(playing == True):
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.quit()
+				playing = false
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_UP:
+					p_xcord = progress(2, p_xcord)
+				if event.key == pygame.K_DOWN:
+					p_xcord = progress(0, p_xcord)
+				if event.key == pygame.K_SPACE:
+					gameplay = hitball(arrow_angle, p_xcord) 
+					hits += 1
+				if event.key == pygame.K_RIGHT:
+					rotatearrow(1)
+				if event.key == pygame.K_LEFT:
+					rotatearrow(-1)
 
-	#screen.fill(black)
+		#screen.fill(black)
 
-	pygame.draw.line(screen, green, (0, height/2), (50, height/2))
-	pygame.draw.line(screen, green, (width-50, height/2), (width, height/2))
-	pygame.draw.ellipse(screen, (20,70,15), [width-33, height/2-4, 16, 8])
-	pygame.draw.line(screen, (200,200,200), (width-25, height/2), (width-25, height/2-20))
-	pygame.draw.polygon(screen, red, [[width-25, height/2-20],[width-25, height/2-15],[width-35, height/2-18+(it%3)]])
+		pygame.draw.line(screen, green, (0, height/2), (50, height/2))
+		pygame.draw.line(screen, green, (width-50, height/2), (width, height/2))
 
-	i = 1
-	while i < (len(line)):
-		pygame.draw.aaline(screen, green, (line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))
-#		print((line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]))	
-#		pygame.draw.aaline(screen, blue, (line2[i-1][0],line2[i-1][1]),(line2[i][0], line2[i][1]))	
-		i = i + 1
+		# Flag
+		pygame.draw.ellipse(screen, (20,70,15), [flag_topx, flag_topy, flag_w, flag_h])
+		pygame.draw.line(screen, (200,200,200), (width-25, height/2), (width-25, height/2-20))
+		pygame.draw.polygon(screen, red, [[width-25, height/2-20],[width-25, height/2-15],[width-35, height/2-18+(it%3)]])
+	
+		i = 1
+		while i < (len(line)):
+			pygame.draw.aaline(screen, green, (line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))
+#			print((line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]))	
+#			pygame.draw.aaline(screen, blue, (line2[i-1][0],line2[i-1][1]),(line2[i][0], line2[i][1]))	
+			i = i + 1
+			
+		moveball(ball_c, ball_x, ball_y)
+	
+		arrow_x = ball_x 
+		arrow_y = ball_y
+		x = arrow_x + arrow_r*math.cos(arrow_angle)
+		y = arrow_y - arrow_r*math.sin(arrow_angle)
+		pygame.draw.aaline(screen, (250,250,15),(arrow_x,arrow_y), (x,y))
 		
-	moveball(ball_c, ball_x, ball_y)
+		#Draw scoreboard
+		pygame.draw.rect(screen, white, pygame.Rect(0, height-65, 320, 65));
+		label = myfont.render("Some text!" ,1, (255,255,255))
+		screen.blit(label, (100,100))
+		
+		#Draw power bar
+		pygame.draw.rect(screen, black, pygame.Rect(28,548,136,34))
+		pygame.draw.rect(screen, blue, pygame.Rect(30,550,132,30))
+		pygame.draw.rect(screen, p_color, pygame.Rect(30,550,30+p_xcord,30))
+		
+		it = it + 1
+		pygame.display.flip()
+		
+		# Ball in hole
+		if gameplay != 0:
+			score.append(hits)
+			print ("YOU WIN " + str(hits))
+			playing = False
 
-	arrow_x = ball_x 
-	arrow_y = ball_y
-	x = arrow_x + arrow_r*math.cos(arrow_angle)
-	y = arrow_y - arrow_r*math.sin(arrow_angle)
-	pygame.draw.aaline(screen, (250,250,15),(arrow_x,arrow_y), (x,y))
-	
-	#Draw power bar
-	pygame.draw.rect(screen, white, pygame.Rect(30,550,132,30))
-	pygame.draw.rect(screen, p_color, pygame.Rect(30,550,30+p_xcord,30))
-	
-	it = it + 1
-	pygame.display.flip()
+	screen.fill(black)
+	line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 200, 12)
+	data = line_data()
+	playing = True
+	gameplay = 0
+	hits = 0
+	ball_x = 25
+	ball_y = height/2
+
