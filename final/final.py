@@ -113,7 +113,7 @@ def hitball(angle, velocity):
 	dt_total = dt
 	vel_y = vel_y * -1
 	# Ball is moving fast enough to move
-	while vel_y < -4:
+	while velocity > 4:
 		# Run until the ball hits the ground
 		#while pos_y <= data[int(pos_x)]+2 and pos_y>=data[int(pos_x)]-2 or pos_y >= data[int(pos_x)]:
 		#while pos_y >= data[int(pos_x)]-6 and pos_y <= data[int(pos_x)]+6 or pos_y <= data[int(pos_x)]:
@@ -156,21 +156,24 @@ def hitball(angle, velocity):
 		# Calculate the bounce angle
 		inco_x = pos_x - (vel_x*dt)
 		inco_y = pos_y - (vel_y*dt)
-		gd_x = pos_x - 2
+		gd_x = pos_x - 1
 		gd_y = data[int(gd_x)]
 		a = math.sqrt(math.pow(inco_x - pos_x, 2) + math.pow(inco_y - pos_y, 2))
 		b = math.sqrt(math.pow(gd_x - pos_x, 2) + math.pow(gd_y - pos_y, 2))
 		c = math.sqrt(math.pow(inco_x - gd_x, 2) + math.pow(inco_y - gd_y, 2))
 		theta = math.acos((a*a + b*b - c*c)/(2*a*b))
-		phi = math.acos(math.fabs(gd_x-pos_x)/b)
+		phi = math.acos(math.fabs(gd_x - pos_x)/b)
 		angle = theta + phi
-		print('t', theta)
-		print('p', phi)
-		print('a', angle)
+		if (inco_x > pos_x):
+			angle = angle + math.pi
+		#print('t', theta)
+		#print('p', phi)
+		#print('a', angle)
 		#angle_incomingball = 
 	
 		velocity = velocity * 0.3
 		vel_y = velocity * math.sin(angle)
+		vel_x = velocity * math.cos(angle)
 		t = (vel_y / 9.8) * 2
 		#dt = dt
 		dt_total = dt
