@@ -295,7 +295,6 @@ for holenumber in range(9):
 				score.append(hits)
 			else:
 				score.append(99)
-			print ("YOU WIN " + str(hits))
 			playing = False
 
 	screen.fill((27,128,186))
