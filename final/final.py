@@ -103,7 +103,7 @@ def moveball(color, new_x, new_y):
 
 def hitball(angle, velocity):
 	vel_y = velocity * math.sin(angle)
-	print (vel_y)
+#	print (vel_y)
 	vel_x = velocity * math.cos(angle)
 	t = (vel_y / 9.8)* 2
 	global ball_x, ball_y, data
@@ -164,6 +164,9 @@ def hitball(angle, velocity):
 		theta = math.acos((a*a + b*b - c*c)/(2*a*b))
 		phi = math.acos(math.fabs(gd_x-pos_x)/b)
 		angle = theta + phi
+		print(theta)
+		print(phi)
+		print(angle)
 		#angle_incomingball = 
 	
 		velocity = velocity * 0.3
@@ -181,7 +184,8 @@ def hitball(angle, velocity):
 	ball_x = pos_x
 	ball_y = data[int(pos_x)]
 #	moveball(ball_c, ball_x, ball_y)
-	print(ball_x, ball_y)
+
+#	print(ball_x, ball_y)
 
 	# ball has not made it into the hole
 	return 0;
