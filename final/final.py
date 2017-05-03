@@ -77,6 +77,9 @@ def midpt_disp(start, end, roughness, v_d = None, num_i = 16):
 	return points
 
 line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
+line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 325, 12)
+line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
+line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
 #line2 = midpt_disp([0+50, height/2], [width-50, height/2], 2.0, 250, 12)
 #for i in range(len(line)):
 #	print((line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))	
@@ -194,6 +197,12 @@ def hitball(angle, velocity):
 	# ball has not made it into the hole
 	return 0;
 
+def draw_fill(line, color):
+	i = 1
+	while i < (len(line)):
+		pygame.draw.aaline(screen, color, (line[i-1][0],line[i-1][1]), (line[i-1][0],height))
+		i = i + 1
+
 # Main loop
 it = 0
 playing = True
@@ -217,14 +226,18 @@ for holenumber in range(9):
 				if event.key == pygame.K_LEFT:
 					rotatearrow(-1)
 
-		#screen.fill(black)
-
-		pygame.draw.line(screen, green, (0, height/2), (50, height/2))
-		pygame.draw.line(screen, green, (width-50, height/2), (width, height/2))
+		screen.fill((27,128,186))
+		draw_fill(line2,(76,3,3))
+		draw_fill(line4,(3,3,76))
+		draw_fill(line3,(3,76,3))
+		draw_fill(line, green)
+		for val in range(50):
+			pygame.draw.aaline(screen, green, (val, height/2), (val, height))
+			pygame.draw.aaline(screen, green, (width-val-1, height/2), (width-val-1, height))
 
 		# Flag
-		pygame.draw.ellipse(screen, (20,70,15), [flag_topx, flag_topy, flag_w, flag_h])
-		pygame.draw.line(screen, (200,200,200), (width-25, height/2), (width-25, height/2-20))
+		pygame.draw.ellipse(screen, (50,50,50), [flag_topx, flag_topy, flag_w, flag_h])
+		pygame.draw.line(screen, white, (width-25, height/2), (width-25, height/2-20))
 		pygame.draw.polygon(screen, red, [[width-25, height/2-20],[width-25, height/2-15],[width-35, height/2-18+(it%3)]])
 	
 		i = 1
@@ -261,8 +274,11 @@ for holenumber in range(9):
 			print ("YOU WIN " + str(hits))
 			playing = False
 
-	screen.fill(black)
+	screen.fill((27,128,186))
 	line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 200, 12)
+	line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 300, 12)
+	line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
+	line4 = midpt_disp([0, height/2], [width, height/2], 1.0, 225, 12)
 	data = line_data()
 	playing = True
 	gameplay = 0
