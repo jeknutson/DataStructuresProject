@@ -88,7 +88,7 @@ def line_data():
 
 #Ball movement
 def moveball(color, new_x, new_y):
-	time.sleep(.1)
+	time.sleep(.01)
 	pygame.display.update(pygame.draw.circle(screen, color, (int(new_x), int(new_y)), ball_r, ball_t))
 
 def hitball(angle, velocity):
@@ -99,15 +99,17 @@ def hitball(angle, velocity):
 	global ball_x, ball_y, data
 	pos_x = ball_x
 	pos_y = ball_y
-	dt = t / 30
+	dt = t / 50
 	dt_total = dt
 	vel_y = vel_y * -1
 	# Ball is moving fast enough to move
 	while vel_y < -7:
 		# Run until the ball hits the ground
+		#while pos_y <= data[int(pos_x)]+2 and pos_y>=data[int(pos_x)]-2 or pos_y >= data[int(pos_x)]:
+		#while pos_y >= data[int(pos_x)]-6 and pos_y <= data[int(pos_x)]+6 or pos_y <= data[int(pos_x)]:
 		while pos_y <= data[int(pos_x)]:
 			vel_y = vel_y + (4.9)*dt
-			#moveball(black, pos_x, pos_y)
+			moveball(black, pos_x, pos_y)
 			pos_x = pos_x + vel_x*dt
 			pos_y = pos_y + vel_y*dt
 
@@ -125,23 +127,28 @@ def hitball(angle, velocity):
 			#print(pos_x)
 
 			dt_total += dt
+			if pos_y > data[int(pos_x)]:
+				break
 			moveball(ball_c, pos_x, pos_y)	
 
 		# Bouncing
-		dt_total -= 2 * dt
+		dt_total = dt_total - 2*dt
 		if pos_x >= 1 and pos_x <= width:
 			pos_x = pos_x - (vel_x*dt)
 		pos_y = data[int(pos_x)] #data is ground data
 
 		# Calculate the bounce angle
-		#incoming_x1 = ball_x + vel_x*(dt_total-dt)
-		#incoming_x2 = pos_x
+		inco_x1 = pos_x - (vel_x*dt)
+		inco_y1 = pos_y - (vel_y*dt)
+		inco_x2 = pos_x
+		inco_y2 = pos_y
+		inco_slope = (inco_x2-inco_x1)
 		#angle_incomingball = 
 	
-		velocity = velocity * .5
+		velocity = velocity * 0.5
 		vel_y = velocity * math.sin(angle)
 		t = (vel_y / 9.8) * 2
-		dt = t / 30
+		#dt = dt
 		dt_total = dt
 		vel_y = vel_y * -1
 		ball_x = pos_x
