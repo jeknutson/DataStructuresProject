@@ -40,6 +40,7 @@ flag_topy = height/2-4
 flag_w = 16
 flag_h = 8
 score = []
+score_x = 50
 
 # Power bar
 def progress(direction, p_xcord):
@@ -75,7 +76,7 @@ def midpt_disp(start, end, roughness, v_d = None, num_i = 16):
 		iteration = iteration + 1
 	return points
 
-line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 200, 12)
+line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
 #line2 = midpt_disp([0+50, height/2], [width-50, height/2], 2.0, 250, 12)
 #for i in range(len(line)):
 #	print((line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))	
@@ -243,8 +244,8 @@ for holenumber in range(9):
 		
 		#Draw scoreboard
 		pygame.draw.rect(screen, white, pygame.Rect(0, height-65, 320, 65));
-		label = myfont.render("Some text!" ,1, (255,255,255))
-		screen.blit(label, (100,100))
+		label = myfont.render("Some text!" ,1, black)
+		screen.blit(label, (150,height-50))
 		
 		#Draw power bar
 		pygame.draw.rect(screen, black, pygame.Rect(28,548,136,34))
