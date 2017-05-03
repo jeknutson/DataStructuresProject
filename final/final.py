@@ -4,7 +4,8 @@ import sys, pygame, os, math, time, random, bisect
 
 pygame.init()
 pygame.display.list_modes()
-myfont = pygame.font.SysFont("monospace", 15)
+myfont = pygame.font.SysFont("monospace", 13)
+myfont2 = pygame.font.SysFont("monospace", 13)
 
 screen = pygame.display.set_mode((1200, 600))
 arrow_angle = math.radians(90)
@@ -40,7 +41,7 @@ flag_topy = height/2-4
 flag_w = 16
 flag_h = 8
 score = []
-score_x = 50
+score_x = 200
 
 # Power bar
 def progress(direction, p_xcord):
@@ -242,10 +243,30 @@ for holenumber in range(9):
 		y = arrow_y - arrow_r*math.sin(arrow_angle)
 		pygame.draw.aaline(screen, (250,250,15),(arrow_x,arrow_y), (x,y))
 		
+		#Create string with current scores
+		output = str("")
+		tota = 0
+		for g in range(holenumber):
+			output += "{:>2} ".format(str(score[g]))
+			output += " "
+			tota += score[g]
+		if hits > 99:
+			output += str(99)
+			tota += 99
+		else:
+			output += str(hits)
+			tota += hits
+		if tota > 999:
+			tota = 999
+
 		#Draw scoreboard
-		pygame.draw.rect(screen, white, pygame.Rect(0, height-65, 320, 65));
-		label = myfont.render("Some text!" ,1, black)
-		screen.blit(label, (150,height-50))
+		pygame.draw.rect(screen, white, pygame.Rect(0, height-65, 550, 65));
+		label = myfont.render("1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | T",1, black)
+		scor = myfont2.render(output, 1, black)
+		tot = myfont2.render("| " + str(tota), 1, black)
+		screen.blit(label, (score_x,height-50))
+		screen.blit(scor, (score_x-5,height-30))
+		screen.blit(tot, (score_x+272, height-30))
 		
 		#Draw power bar
 		pygame.draw.rect(screen, black, pygame.Rect(28,548,136,34))
@@ -257,7 +278,10 @@ for holenumber in range(9):
 		
 		# Ball in hole
 		if gameplay != 0:
-			score.append(hits)
+			if hits <= 99:
+				score.append(hits)
+			else:
+				score.append(99)
 			print ("YOU WIN " + str(hits))
 			playing = False
 
