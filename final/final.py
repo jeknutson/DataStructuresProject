@@ -164,9 +164,9 @@ def hitball(angle, velocity):
 		theta = math.acos((a*a + b*b - c*c)/(2*a*b))
 		phi = math.acos(math.fabs(gd_x-pos_x)/b)
 		angle = theta + phi
-		print(theta)
-		print(phi)
-		print(angle)
+		print('t', theta)
+		print('p', phi)
+		print('a', angle)
 		#angle_incomingball = 
 	
 		velocity = velocity * 0.3
