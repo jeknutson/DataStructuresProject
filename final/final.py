@@ -153,11 +153,15 @@ def hitball(angle, velocity):
 			# Draw ball in new position
 			moveball(ball_c, pos_x, pos_y)	
 
-			#ball hits flag
+			# Ball hits flag
 			if pos_x > flag_topx and pos_x < flag_topx + flag_w:
 				if pos_y > flag_topy and pos_y < flag_topy + flag_h:
 					return 1;
 					break
+			
+			# Handles sideways case
+			if pos_y == pos_y - vel_y*dt:
+				break
 
 		# Bouncing
 		dt_total = dt_total - 2*dt
@@ -359,6 +363,7 @@ end2 = myendfont.render("FINAL SCORE: " + str(tota), 1, white)
 mess = myendfont2.render("Press q to quit, r to restart!", 1, black)
 line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
 data = line_data()
+
 # Draw objects
 draw_background(line2, line3, line4)
 draw_green(line)
