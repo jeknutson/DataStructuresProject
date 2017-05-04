@@ -155,7 +155,7 @@ def hitball(angle, velocity):
 		# Calculate the bounce angle
 		inco_x = pos_x - (vel_x*dt)
 		inco_y = pos_y - (vel_y*dt)
-		gd_x = pos_x - 2
+		gd_x = inco_x - 2
 		gd_y = data[int(gd_x)]
 		a = math.sqrt(math.pow(inco_x - pos_x, 2) + math.pow(inco_y - pos_y, 2))
 		b = math.sqrt(math.pow(gd_x - pos_x, 2) + math.pow(gd_y - pos_y, 2))
@@ -311,6 +311,12 @@ update_lines()
 data = line_data()
 draw_background(line2, line3, line4)
 draw_green(line)
+end = myendfont.render("~GAME OVER~", 1, white)
+end2 = myendfont.render("FINAL SCORE: " + str(tota), 1, white)
+mess = myendfont2.render("Press q to quit, r to restart!", 1, black)
+screen.blit(mess, (100, height - 100))
+screen.blit(end, (width/2-100, height/4))
+screen.blit(end2, (width/2-120, height/4 + 50))
 pygame.display.flip()
 while (1):
 	screen.fill((27,128,186))
@@ -324,9 +330,6 @@ while (1):
 				if event.key == pygame.K_q:
 					pygame.quit()
 					sys.exit(0)
-	end = myendfont.render("~GAME OVER~", 1, white)
-	end2 = myendfont.render("FINAL SCORE: " + str(tota), 1, white)
-	mess = myendfont2.render("Press q to quit, r to restart!", 1, white)
 
 	draw_background(line2, line3, line4)
 	draw_green(line)
