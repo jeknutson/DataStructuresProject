@@ -243,7 +243,8 @@ def restart():
 	os.execl(p, p, *sys.argv)
 
 # Main loop
-it = 0
+it = 0 # flag waving
+zz = 0 # increase difficulty parameters
 playing = True
 
 # Set up initial line variables
@@ -253,7 +254,7 @@ line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
 line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
 data = line_data()
 
-for holenumber in range(1):
+for holenumber in range(9):
 	while(playing == True):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -335,7 +336,8 @@ for holenumber in range(1):
 	# Update proper variables for next hole
 	screen.fill((27,128,186))
 	update_lines()
-	line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
+	zz = float(zz + 10)
+	line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8 - zz/10, 50 + zz, 12)
 	data = line_data()
 	playing = True
 	gameplay = 0
