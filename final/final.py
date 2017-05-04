@@ -72,6 +72,7 @@ def rotatearrow(direction):
 	pygame.draw.aaline(screen, (250, 250, 15),(arrow_x,arrow_y), (x,y))
 
 def midpt_disp(start, end, roughness, v_d = None, num_i = 16):
+	# Midpoint displacement algorithm based on bitesofcode.wordpress.com
 	if v_d is None:
 		v_d = (start[1]+end[1])/2
 	points = [start, end]
@@ -87,7 +88,6 @@ def midpt_disp(start, end, roughness, v_d = None, num_i = 16):
 	return points
 
 def update_lines():
-	
 	# Calculates new line position for green and background lines
 	global line2, line3, line4
 	line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 325, 12)
@@ -184,7 +184,10 @@ def hitball(angle, velocity):
 
 		angle2 = 0.00
 		gd_x = pos_x + 2
-		gd_y = data[int(gd_x)]
+		if gd_x >= width:
+			gd_y = data[int(width)]
+		else:
+			gd_y = data[int(gd_x)]
 		a = math.sqrt(math.pow(inco_x - pos_x, 2) + math.pow(inco_y - pos_y, 2))
 		b = math.sqrt(math.pow(gd_x - pos_x, 2) + math.pow(gd_y - pos_y, 2))
 		c = math.sqrt(math.pow(inco_x - gd_x, 2) + math.pow(inco_y - gd_y, 2))
@@ -244,7 +247,7 @@ def restart():
 
 # Main loop
 it = 0 # flag waving
-zz = 0 # increase difficulty parameters
+zz = 0.00 # increase difficulty parameters
 playing = True
 
 # Set up initial line variables
@@ -336,8 +339,8 @@ for holenumber in range(9):
 	# Update proper variables for next hole
 	screen.fill((27,128,186))
 	update_lines()
-	zz = float(zz + 10)
-	line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8 - zz/10, 50 + zz, 12)
+	zz = zz + 20
+	line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50 + zz, 12)
 	data = line_data()
 	playing = True
 	gameplay = 0
@@ -354,7 +357,8 @@ myendfont2 = pygame.font.SysFont("monospace", 18)
 end = myendfont.render("~GAME OVER~", 1, white)
 end2 = myendfont.render("FINAL SCORE: " + str(tota), 1, white)
 mess = myendfont2.render("Press q to quit, r to restart!", 1, black)
-
+line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
+data = line_data()
 # Draw objects
 draw_background(line2, line3, line4)
 draw_green(line)
