@@ -220,7 +220,11 @@ def draw_green(line):
 		pygame.draw.aaline(screen, green, (val, height/2), (val, height))
 		pygame.draw.aaline(screen, green, (width-val-1, height/2), (width-val-1, height))
 
-
+def draw_endtext():
+	global mess, end, end2
+	screen.blit(mess, (100, height - 100))
+	screen.blit(end, (width/2-100, height/4))
+	screen.blit(end2, (width/2-120, height/4 + 50))
 
 def restart():
 	p = sys.executable
@@ -331,18 +335,19 @@ pygame.display.update(screen.fill((27,128,186)))
 myendfont = pygame.font.SysFont("monospace", 26)
 myendfont2 = pygame.font.SysFont("monospace", 18)
 
-# Update green and background
-update_lines()
-data = line_data()
-draw_background(line2, line3, line4)
-draw_green(line)
-# set up in game text
+# Set up end game text
 end = myendfont.render("~GAME OVER~", 1, white)
 end2 = myendfont.render("FINAL SCORE: " + str(tota), 1, white)
 mess = myendfont2.render("Press q to quit, r to restart!", 1, black)
-screen.blit(mess, (100, height - 100))
-screen.blit(end, (width/2-100, height/4))
-screen.blit(end2, (width/2-120, height/4 + 50))
+
+# Update green and background
+update_lines()
+data = line_data()
+
+# Draw objects
+draw_background(line2, line3, line4)
+draw_green(line)
+draw_endtext()
 pygame.display.flip()
 while (1):
 	screen.fill((27,128,186))
@@ -363,10 +368,7 @@ while (1):
 	gameplay = hitball(math.radians(random.randint(0,180)), random.randint(30,100))
 
 	# Display end game text
-	screen.blit(mess, (100, height - 100))
-	screen.blit(end, (width/2-100, height/4))
-	screen.blit(end2, (width/2-120, height/4 + 50))
-
+	draw_endtext()
 	pygame.display.flip()
 
 
