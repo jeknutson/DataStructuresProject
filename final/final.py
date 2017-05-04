@@ -77,10 +77,12 @@ def midpt_disp(start, end, roughness, v_d = None, num_i = 16):
 		iteration = iteration + 1
 	return points
 
-line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
-line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 325, 12)
-line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
-line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
+def update_lines():
+	global line, line2, line3, line4
+	line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
+	line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 325, 12)
+	line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
+	line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
 
 def line_data():
 	global line
@@ -188,6 +190,20 @@ def draw_fill(line, color):
 	while i < (len(line)):
 		pygame.draw.aaline(screen, color, (line[i-1][0],line[i-1][1]), (line[i-1][0],height))
 		i = i + 1
+
+def draw_background(line2, line3, lin4):
+	draw_fill(line2,(76,3,3))
+	draw_fill(line4,(3,3,76))
+	draw_fill(line3,(3,76,3))
+
+def draw_green(line):
+	draw_fill(line, green)
+	for val in range(50):
+		pygame.draw.aaline(screen, green, (val, height/2), (val, height))
+		pygame.draw.aaline(screen, green, (width-val-1, height/2), (width-val-1, height))
+
+
+
 def restart():
 	p = sys.executable
 	os.execl(p, p, *sys.argv)
@@ -195,6 +211,10 @@ def restart():
 # Main loop
 it = 0
 playing = True
+line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
+line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 325, 12)
+line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
+line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
 data = line_data()
 for holenumber in range(1):
 	while(playing == True):
@@ -216,13 +236,8 @@ for holenumber in range(1):
 					rotatearrow(-1)
 
 		screen.fill((27,128,186))
-		draw_fill(line2,(76,3,3))
-		draw_fill(line4,(3,3,76))
-		draw_fill(line3,(3,76,3))
-		draw_fill(line, green)
-		for val in range(50):
-			pygame.draw.aaline(screen, green, (val, height/2), (val, height))
-			pygame.draw.aaline(screen, green, (width-val-1, height/2), (width-val-1, height))
+		draw_background(line2, line3, line4)
+		draw_green(line)
 
 		# Flag
 		pygame.draw.ellipse(screen, (50,50,50), [flag_topx, flag_topy, flag_w, flag_h])
@@ -279,10 +294,7 @@ for holenumber in range(1):
 			playing = False
 
 	screen.fill((27,128,186))
-	line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
-	line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 300, 12)
-	line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
-	line4 = midpt_disp([0, height/2], [width, height/2], 1.0, 225, 12)
+	update_lines()
 	data = line_data()
 	playing = True
 	gameplay = 0
@@ -295,16 +307,10 @@ pygame.display.update(screen.fill((27,128,186)))
 myendfont = pygame.font.SysFont("monospace", 26)
 myendfont2 = pygame.font.SysFont("monospace", 18)
 
-line = midpt_disp([0, height/2], [width, height/2], 1.2, 100, 12)
-line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 325, 12)
-line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
-line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
-
+update_lines()
 data = line_data()
-draw_fill(line2, (76,3,3))
-draw_fill(line4, (3,3,76))
-draw_fill(line3, (3,76,3))
-draw_fill(line,(green))
+draw_background(line2, line3, line4)
+draw_green(line)
 pygame.display.flip()
 while (1):
 	screen.fill((27,128,186))
@@ -322,11 +328,8 @@ while (1):
 	end2 = myendfont.render("FINAL SCORE: " + str(tota), 1, white)
 	mess = myendfont2.render("Press q to quit, r to restart!", 1, white)
 
-	draw_fill(line2,(76,3,3))
-	draw_fill(line4,(3,3,76))
-	draw_fill(line3,(3,76,3))
-	draw_fill(line,(green))
-
+	draw_background(line2, line3, line4)
+	draw_green(line)
 	gameplay = hitball(math.radians(random.randint(0,180)), random.randint(30,100))
 
 	screen.blit(mess, (100, height - 100))
