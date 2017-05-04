@@ -63,10 +63,10 @@ def progress(direction, p_xcord):
 def rotatearrow(direction):
 	# Update arrow direction, depending on user's key press
 	global arrow_x,arrow_y,arrow_angle
-	if direction > 0:
-		arrow_angle = arrow_angle + math.radians(-10)
-	elif direction < 0:
-		arrow_angle = arrow_angle + math.radians(10)
+	if direction > 0 and arrow_angle > math.pi/16:
+		arrow_angle = arrow_angle - math.pi/16
+	elif direction < 0 and arrow_angle < math.pi*15/16:
+		arrow_angle = arrow_angle + math.pi/16
 	x = arrow_x + arrow_r*math.cos(arrow_angle)
 	y = arrow_y - arrow_r*math.sin(arrow_angle)
 	pygame.draw.aaline(screen, (250, 250, 15),(arrow_x,arrow_y), (x,y))
@@ -159,10 +159,6 @@ def hitball(angle, velocity):
 					return 1;
 					break
 			
-			# Handles sideways case
-			if pos_y == pos_y - vel_y*dt:
-				break
-
 		# Bouncing
 		dt_total = dt_total - 2*dt
 		if pos_x >= 1 and pos_x <= width:
