@@ -121,7 +121,6 @@ def hitball(angle, velocity):
 	
 	# Calculate physics of ball movement
 	vel_y = velocity * math.sin(angle)
-#	print (vel_y)
 	vel_x = velocity * math.cos(angle)
 	t = (vel_y / 9.8)* 2
 	global ball_x, ball_y, data
@@ -132,7 +131,6 @@ def hitball(angle, velocity):
 	vel_y = vel_y * -1
 	# Ball is moving fast enough to move
 	while math.sqrt(math.pow(vel_x, 2) + math.pow(vel_y, 2)) > 1:
-
 		# Run until the ball hits the ground
 		while pos_y <= data[int(pos_x)]:
 			vel_y = vel_y + (4.9)*dt
@@ -169,22 +167,37 @@ def hitball(angle, velocity):
 		pos_y = data[int(pos_x)] #data is ground data
 
 		# Calculate the bounce angle
+		angle1 = 0.00
 		inco_x = pos_x - (vel_x*dt)
 		inco_y = pos_y - (vel_y*dt)
-		gd_x = inco_x - 2
+
+		gd_x = pos_x - 2
 		gd_y = data[int(gd_x)]
 		a = math.sqrt(math.pow(inco_x - pos_x, 2) + math.pow(inco_y - pos_y, 2))
 		b = math.sqrt(math.pow(gd_x - pos_x, 2) + math.pow(gd_y - pos_y, 2))
 		c = math.sqrt(math.pow(inco_x - gd_x, 2) + math.pow(inco_y - gd_y, 2))
 		theta = math.acos((a*a + b*b - c*c)/(2*a*b))
-#		angle = -1*theta + math.pi
+		phi = math.acos(2/b)
+		if (gd_y <= pos_y):
+			angle1 = theta + phi
+		elif (gd_y > pos_y):
+			angle1 = theta - phi
 
-		phi = math.acos(math.fabs(gd_x - pos_x)/b)
-#		angle = theta + phi
-		if (inco_x <= pos_x):
-			angle = theta + phi
-		elif (inco_x > pos_x):
-			angle = theta - phi
+		angle2 = 0.00
+		gd_x = pos_x + 2
+		gd_y = data[int(gd_x)]
+		a = math.sqrt(math.pow(inco_x - pos_x, 2) + math.pow(inco_y - pos_y, 2))
+		b = math.sqrt(math.pow(gd_x - pos_x, 2) + math.pow(gd_y - pos_y, 2))
+		c = math.sqrt(math.pow(inco_x - gd_x, 2) + math.pow(inco_y - gd_y, 2))
+		theta = math.acos((a*a + b*b - c*c)/(2*a*b))
+		phi = math.acos(2/b)
+		if (gd_y <= pos_y):
+			angle2 = theta + phi - math.pi
+		elif (gd_y > pos_y):
+			angle2 = theta - phi - math.pi
+		angle2 = -1*angle2
+
+		angle = (angle1 + angle2)/2
 		
 		velocity = velocity * 0.6
 		vel_y = velocity * math.sin(angle)
@@ -241,7 +254,7 @@ line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
 line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
 data = line_data()
 
-for holenumber in range(1):
+for holenumber in range(9):
 	while(playing == True):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
