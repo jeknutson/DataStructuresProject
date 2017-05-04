@@ -241,7 +241,7 @@ line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
 line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
 data = line_data()
 
-for holenumber in range(1):
+for holenumber in range(9):
 	while(playing == True):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
