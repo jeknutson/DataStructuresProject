@@ -81,9 +81,6 @@ line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
 line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 325, 12)
 line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
 line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
-#line2 = midpt_disp([0+50, height/2], [width-50, height/2], 2.0, 250, 12)
-#for i in range(len(line)):
-#	print((line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))	
 
 def line_data():
 	global line
@@ -103,7 +100,7 @@ def line_data():
 
 #Ball movement
 def moveball(color, new_x, new_y):
-	time.sleep(.01)
+	time.sleep(.005)
 	pygame.display.update(pygame.draw.circle(screen, color, (int(new_x), int(new_y)), ball_r, ball_t))
 
 def hitball(angle, velocity):
@@ -120,8 +117,6 @@ def hitball(angle, velocity):
 	# Ball is moving fast enough to move
 	while velocity > 4:
 		# Run until the ball hits the ground
-		#while pos_y <= data[int(pos_x)]+2 and pos_y>=data[int(pos_x)]-2 or pos_y >= data[int(pos_x)]:
-		#while pos_y >= data[int(pos_x)]-6 and pos_y <= data[int(pos_x)]+6 or pos_y <= data[int(pos_x)]:
 		while pos_y <= data[int(pos_x)]:
 			vel_y = vel_y + (4.9)*dt
 			moveball(black, pos_x, pos_y)
@@ -132,9 +127,7 @@ def hitball(angle, velocity):
 			if pos_x > width:
 				vel_x = -vel_x
 				pos_x = width - 1
-			#if pos_y <= 0:
-			#	vel_y = -vel_y
-			#	pos_y = 1
+
 			if pos_x < 1:
 				vel_x = -vel_x
 				pos_x = 1	
@@ -171,11 +164,7 @@ def hitball(angle, velocity):
 		angle = theta + phi
 		if (inco_x > pos_x):
 			angle = angle + math.pi
-		#print('t', theta)
-		#print('p', phi)
-		#print('a', angle)
-		#angle_incomingball = 
-	
+		
 		velocity = velocity * 0.3
 		vel_y = velocity * math.sin(angle)
 		vel_x = velocity * math.cos(angle)
@@ -185,15 +174,8 @@ def hitball(angle, velocity):
 		vel_y = vel_y * -1
 		ball_x = pos_x
 		ball_y = pos_y
-#	moveball(black, pos_x, pos_y)
-#	pos_x = ball_x + vel_x*t
-#	pos_y = ball_y + vel_y*t + 4.9*t*t
-#	moveball(ball_c, pos_x, pos_y)
 	ball_x = pos_x
 	ball_y = data[int(pos_x)]
-#	moveball(ball_c, ball_x, ball_y)
-
-#	print(ball_x, ball_y)
 
 	# ball has not made it into the hole
 	return 0;
@@ -244,8 +226,6 @@ for holenumber in range(9):
 		i = 1
 		while i < (len(line)):
 			pygame.draw.aaline(screen, green, (line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))
-#			print((line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]))	
-#			pygame.draw.aaline(screen, blue, (line2[i-1][0],line2[i-1][1]),(line2[i][0], line2[i][1]))	
 			i = i + 1
 			
 		moveball(ball_c, ball_x, ball_y)
@@ -298,7 +278,7 @@ for holenumber in range(9):
 			playing = False
 
 	screen.fill((27,128,186))
-	line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 200, 12)
+	line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
 	line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 300, 12)
 	line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
 	line4 = midpt_disp([0, height/2], [width, height/2], 1.0, 225, 12)
