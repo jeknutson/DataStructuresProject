@@ -1,6 +1,12 @@
 #!/afs/nd.edu/user14/csesoft/cse20312/bin/python3.6
 
-import sys, pygame, os, math, time, random, bisect
+import sys
+import pygame
+import os
+import math
+import time
+import random
+import bisect
 
 pygame.init()
 pygame.display.list_modes()
@@ -12,6 +18,7 @@ arrow_angle = math.radians(90)
 clock = pygame.time.Clock()
 done = False
 
+# Define global variables
 size = width, height = 1200, 600
 running = 1
 black = 0, 0, 0
@@ -28,6 +35,7 @@ arrow_x = 30
 arrow_y = 100
 arrow_r = 20
 
+# Holds ball info
 ball_r = 3
 ball_c = white
 ball_t = 0
@@ -53,6 +61,7 @@ def progress(direction, p_xcord):
 	return p_xcord
 
 def rotatearrow(direction):
+	# Update arrow direction, depending on user's key press
 	global arrow_x,arrow_y,arrow_angle
 	if direction > 0:
 		arrow_angle = arrow_angle + math.radians(-10)
@@ -78,6 +87,8 @@ def midpt_disp(start, end, roughness, v_d = None, num_i = 16):
 	return points
 
 def update_lines():
+	
+	# Calculates new line position for green and background lines
 	global line, line2, line3, line4
 	line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
 	line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 325, 12)
@@ -85,6 +96,7 @@ def update_lines():
 	line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
 
 def line_data():
+	# Creates data list that holds the y position of the green
 	global line
 	data = []
 	data.append(height/2)
@@ -100,12 +112,14 @@ def line_data():
 	return data
 
 
-#Ball movement
+# Ball movement
 def moveball(color, new_x, new_y):
 	time.sleep(.005)
 	pygame.display.update(pygame.draw.circle(screen, color, (int(new_x), int(new_y)), ball_r, ball_t))
 
 def hitball(angle, velocity):
+	
+	# Calculate physics of ball movement
 	vel_y = velocity * math.sin(angle)
 #	print (vel_y)
 	vel_x = velocity * math.cos(angle)
@@ -118,6 +132,7 @@ def hitball(angle, velocity):
 	vel_y = vel_y * -1
 	# Ball is moving fast enough to move
 	while math.sqrt(math.pow(vel_x, 2) + math.pow(vel_y, 2)) > 1:
+
 		# Run until the ball hits the ground
 		while pos_y <= data[int(pos_x)]:
 			vel_y = vel_y + (4.9)*dt
@@ -137,7 +152,8 @@ def hitball(angle, velocity):
 			dt_total += dt
 			if pos_y > data[int(pos_x)]:
 				break
-
+			
+			# Draw ball in new position
 			moveball(ball_c, pos_x, pos_y)	
 
 			#ball hits flag
@@ -179,6 +195,8 @@ def hitball(angle, velocity):
 		vel_y = vel_y * -1
 		ball_x = pos_x
 		ball_y = pos_y
+
+	# update ball's x and y to final position
 	ball_x = pos_x
 	ball_y = data[int(pos_x)]
 
@@ -211,11 +229,14 @@ def restart():
 # Main loop
 it = 0
 playing = True
+
+# Set up initial line variables
 line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
 line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 325, 12)
 line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
 line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
 data = line_data()
+
 for holenumber in range(1):
 	while(playing == True):
 		for event in pygame.event.get():
@@ -235,6 +256,7 @@ for holenumber in range(1):
 				if event.key == pygame.K_LEFT:
 					rotatearrow(-1)
 
+		# Draw hole elements
 		screen.fill((27,128,186))
 		draw_background(line2, line3, line4)
 		draw_green(line)
@@ -246,6 +268,7 @@ for holenumber in range(1):
 		
 		moveball(ball_c, ball_x, ball_y)
 	
+		# Update and draw arrow
 		arrow_x = ball_x 
 		arrow_y = ball_y
 		x = arrow_x + arrow_r*math.cos(arrow_angle)
@@ -293,6 +316,7 @@ for holenumber in range(1):
 				score.append(99)
 			playing = False
 
+	# Update proper variables for next hole
 	screen.fill((27,128,186))
 	update_lines()
 	data = line_data()
@@ -302,15 +326,17 @@ for holenumber in range(1):
 	ball_x = 25
 	ball_y = height/2
 
-# Game is over
+## Game is over ##
 pygame.display.update(screen.fill((27,128,186)))
 myendfont = pygame.font.SysFont("monospace", 26)
 myendfont2 = pygame.font.SysFont("monospace", 18)
 
+# Update green and background
 update_lines()
 data = line_data()
 draw_background(line2, line3, line4)
 draw_green(line)
+# set up in game text
 end = myendfont.render("~GAME OVER~", 1, white)
 end2 = myendfont.render("FINAL SCORE: " + str(tota), 1, white)
 mess = myendfont2.render("Press q to quit, r to restart!", 1, black)
@@ -331,10 +357,12 @@ while (1):
 					pygame.quit()
 					sys.exit(0)
 
+	# Ball randomly moves on final screen
 	draw_background(line2, line3, line4)
 	draw_green(line)
 	gameplay = hitball(math.radians(random.randint(0,180)), random.randint(30,100))
 
+	# Display end game text
 	screen.blit(mess, (100, height - 100))
 	screen.blit(end, (width/2-100, height/4))
 	screen.blit(end2, (width/2-120, height/4 + 50))
