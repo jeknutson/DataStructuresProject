@@ -115,7 +115,7 @@ def hitball(angle, velocity):
 	dt_total = dt
 	vel_y = vel_y * -1
 	# Ball is moving fast enough to move
-	while velocity > 4:
+	while math.sqrt(math.pow(vel_x, 2) + math.pow(vel_y, 2)) > 1:
 		# Run until the ball hits the ground
 		while pos_y <= data[int(pos_x)]:
 			vel_y = vel_y + (4.9)*dt
@@ -132,11 +132,10 @@ def hitball(angle, velocity):
 				vel_x = -vel_x
 				pos_x = 1	
 
-			#print(pos_x)
-
 			dt_total += dt
 			if pos_y > data[int(pos_x)]:
 				break
+
 			moveball(ball_c, pos_x, pos_y)	
 
 			#ball hits flag
@@ -154,22 +153,26 @@ def hitball(angle, velocity):
 		# Calculate the bounce angle
 		inco_x = pos_x - (vel_x*dt)
 		inco_y = pos_y - (vel_y*dt)
-		gd_x = pos_x - 1
+		gd_x = pos_x - 2
 		gd_y = data[int(gd_x)]
 		a = math.sqrt(math.pow(inco_x - pos_x, 2) + math.pow(inco_y - pos_y, 2))
 		b = math.sqrt(math.pow(gd_x - pos_x, 2) + math.pow(gd_y - pos_y, 2))
 		c = math.sqrt(math.pow(inco_x - gd_x, 2) + math.pow(inco_y - gd_y, 2))
 		theta = math.acos((a*a + b*b - c*c)/(2*a*b))
+#		angle = -1*theta + math.pi
+
 		phi = math.acos(math.fabs(gd_x - pos_x)/b)
-		angle = theta + phi
-		if (inco_x > pos_x):
-			angle = angle + math.pi
+#		angle = theta + phi
+		if (inco_x <= pos_x):
+			angle = theta + phi
+		elif (inco_x > pos_x):
+			angle = theta - phi
 		
-		velocity = velocity * 0.3
+		velocity = velocity * 0.6
 		vel_y = velocity * math.sin(angle)
 		vel_x = velocity * math.cos(angle)
 		t = (vel_y / 9.8) * 2
-		#dt = dt
+
 		dt_total = dt
 		vel_y = vel_y * -1
 		ball_x = pos_x
@@ -222,12 +225,7 @@ for holenumber in range(9):
 		pygame.draw.ellipse(screen, (50,50,50), [flag_topx, flag_topy, flag_w, flag_h])
 		pygame.draw.line(screen, white, (width-25, height/2), (width-25, height/2-20))
 		pygame.draw.polygon(screen, red, [[width-25, height/2-20],[width-25, height/2-15],[width-35, height/2-18+(it%3)]])
-	
-		i = 1
-		while i < (len(line)):
-			pygame.draw.aaline(screen, green, (line[i-1][0],line[i-1][1]),(line[i][0], line[i][1]))
-			i = i + 1
-			
+		
 		moveball(ball_c, ball_x, ball_y)
 	
 		arrow_x = ball_x 
