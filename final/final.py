@@ -185,12 +185,15 @@ def draw_fill(line, color):
 	while i < (len(line)):
 		pygame.draw.aaline(screen, color, (line[i-1][0],line[i-1][1]), (line[i-1][0],height))
 		i = i + 1
+def restart():
+	p = sys.executable
+	os.execl(p, p, *sys.argv)
 
 # Main loop
 it = 0
 playing = True
 data = line_data()
-for holenumber in range(9):
+for holenumber in range(1):
 	while(playing == True):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -288,4 +291,50 @@ for holenumber in range(9):
 	hits = 0
 	ball_x = 25
 	ball_y = height/2
+
+# Game is over
+pygame.display.update(screen.fill((27,128,186)))
+myendfont = pygame.font.SysFont("monospace", 26)
+myendfont2 = pygame.font.SysFont("monospace", 18)
+
+line = midpt_disp([0, height/2], [width, height/2], 1.2, 100, 12)
+line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 325, 12)
+line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
+line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
+
+data = line_data()
+draw_fill(line2, (76,3,3))
+draw_fill(line4, (3,3,76))
+draw_fill(line3, (3,76,3))
+draw_fill(line,(green))
+pygame.display.flip()
+while (1):
+	screen.fill((27,128,186))
+	for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.quit()
+				sys.exit(0)
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_r:
+					restart()
+				if event.key == pygame.K_q:
+					pygame.quit()
+					sys.exit(0)
+	end = myendfont.render("~GAME OVER~", 1, white)
+	end2 = myendfont.render("FINAL SCORE: " + str(tota), 1, white)
+	mess = myendfont2.render("Press q to quit, r to restart!", 1, white)
+
+	draw_fill(line2,(76,3,3))
+	draw_fill(line4,(3,3,76))
+	draw_fill(line3,(3,76,3))
+	draw_fill(line,(green))
+
+	gameplay = hitball(math.radians(random.randint(0,180)), random.randint(30,100))
+
+	screen.blit(mess, (100, height - 100))
+	screen.blit(end, (width/2-100, height/4))
+	screen.blit(end2, (width/2-120, height/4 + 50))
+
+	pygame.display.flip()
+
 
