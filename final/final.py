@@ -89,8 +89,7 @@ def midpt_disp(start, end, roughness, v_d = None, num_i = 16):
 def update_lines():
 	
 	# Calculates new line position for green and background lines
-	global line, line2, line3, line4
-	line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
+	global line2, line3, line4
 	line2 = midpt_disp([0, height/2], [width, height/2], 1.0, 325, 12)
 	line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
 	line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
@@ -254,7 +253,7 @@ line3 = midpt_disp([0, height/2], [width, height/2], 1.0, 150, 12)
 line4 = midpt_disp([0, height/2], [width, height/2], 0.8, 225, 12)
 data = line_data()
 
-for holenumber in range(9):
+for holenumber in range(1):
 	while(playing == True):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -336,6 +335,7 @@ for holenumber in range(9):
 	# Update proper variables for next hole
 	screen.fill((27,128,186))
 	update_lines()
+	line = midpt_disp([0+50, height/2], [width-50, height/2], 1.8, 50, 12)
 	data = line_data()
 	playing = True
 	gameplay = 0
@@ -352,10 +352,6 @@ myendfont2 = pygame.font.SysFont("monospace", 18)
 end = myendfont.render("~GAME OVER~", 1, white)
 end2 = myendfont.render("FINAL SCORE: " + str(tota), 1, white)
 mess = myendfont2.render("Press q to quit, r to restart!", 1, black)
-
-# Update green and background
-update_lines()
-data = line_data()
 
 # Draw objects
 draw_background(line2, line3, line4)
