@@ -82,6 +82,36 @@ def verify(v, assignment):
     # If it made it out of the for loop, all clauses must be true
     return True
 
+def output(v, satVal, exTime, assignment):
+    counter = 0
+    for i in range(len(v[5]):
+        counter += len(v[5][i])	# adds number of literals in each clause
+    # compare satVal to actaul S/U value in problem
+    if v[2] ~= 'S' and v[2] ~= 'U':
+        correctness = 0
+    elif v[2] == satVal:
+        correctness = 1
+    else 
+        correctness = -1
+    outputFile = open('output.csv', 'w+')
+    output = v[0] + ',' + v[3] + ',' + v[4] + ',' + v[1] + ','
+    output += str(counter) + ',' + satVal + ',' + correctness + ','
+    output += str(exTime)
+    for i in range(len(assignment))
+        output += ',' + assignment[i]
+
+#MAIN
+
+# parse command line arguments for filename and binary argument
+args = sys.argv[1:]
+arg = args.pop(0)
+FILENAME = arg
+arg = args.pop(0)
+if arg == '0':
+  DEBUG = False
+else:
+  DEBUG = True
+
 
 f = open(FILENAME, "r")
 
@@ -105,5 +135,6 @@ for i in xrange(2**int(numVar)):
         print assignment + " S"
         break
 
-# Create output line
+f.close()
 
+# Create output line
