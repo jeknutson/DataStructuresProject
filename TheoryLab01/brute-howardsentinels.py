@@ -19,6 +19,10 @@ def readwff(f):
     # Get first line of wff, store each value in a list
     line = f.readline().rstrip().split(" ")
 
+    # Check if at end of file
+    if len(line) == 1:
+        return False
+
     probNum = line[1]
     maxLit = line[2]
     satVal = line[3]
@@ -84,23 +88,26 @@ def verify(v, assignment):
 
 def output(v, satVal, exTime, assignment):
     counter = 0
-    for i in range(len(v[5]):
+    for i in range(len(v[5])):
         counter += len(v[5][i])	# adds number of literals in each clause
     # compare satVal to actaul S/U value in problem
-    if v[2] ~= 'S' and v[2] ~= 'U':
+    if v[2] != 'S' and v[2] != 'U':
         correctness = 0
     elif v[2] == satVal:
         correctness = 1
-    else 
+    else: 
         correctness = -1
     outputFile = open('output.csv', 'w+')
     output = v[0] + ',' + v[3] + ',' + v[4] + ',' + v[1] + ','
-    output += str(counter) + ',' + satVal + ',' + correctness + ','
+    output += str(counter) + ',' + satVal + ',' + str(correctness) + ','
     output += str(exTime)
-    for i in range(len(assignment))
-        output += ',' + assignment[i]
+    if satVal == "S":
+        for i in range(len(assignment)):
+            output += ',' + assignment[i]
+    
+    print output
 
-#MAIN
+#####MAIN#####
 
 # parse command line arguments for filename and binary argument
 args = sys.argv[1:]
@@ -115,25 +122,42 @@ else:
 
 f = open(FILENAME, "r")
 
-# Get tuple that contains all the necessary variables from the wff
-v = readwff(f)
-numVar = v[3]
-
-# Generate all possible assignment
-genObject = genassignment(int(numVar), '01')
-
-
-# Loop through all possible assignments
-for i in xrange(2**int(numVar)):
-
-    # Pop off one possible assignment
-    assignment = next(genObject)
+while True:
+    # Get tuple that contains all the necessary variables from the wff
+    v = readwff(f)
     
-    # Check if assignment is correct
-    t = verify(v, assignment)
-    if t == True:
-        print assignment + " S"
+    # If false is returned, end of file is reached
+    if v == False:
         break
+
+    numVar = v[3]
+
+    # Create generator object of all possible assignment
+    genObject = genassignment(int(numVar), '01')
+
+    # Loop through all possible assignments
+    for i in xrange(2**int(numVar)):
+
+        # Start execution time
+        if i == 0:
+            dt = time.time()
+        # Pop off one possible assignment
+        assignment = next(genObject)
+    
+        # Check if assignment is correct
+        t = verify(v, assignment)
+        if t == True:
+            satVal = "S"
+            break
+        else:
+            satVal = "U"
+
+    # End the execution time
+    dt = time.time() - dt
+    dt = 1E6*dt
+
+    # Create output for wff
+    output(v, satVal, round(dt,2), assignment)
 
 f.close()
 
