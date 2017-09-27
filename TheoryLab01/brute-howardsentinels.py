@@ -37,9 +37,34 @@ def readwff(f):
         
     # Return values in a tuple
     return (probNum, maxLit, satVal, numVar, numClauses, L)
-     
+    
+# Generates next possible assignment recursively 
+def genassignment(numVar, a):
+    if (numVar < 1):
+        yield str()
+    else:
+        for i in range(2):
+            m = a[i]
+            for p in genassignment(numVar-1, a):
+                yield str(m+p)
 
 f = open(FILENAME, "r")
 
+# Get tuple that contains all the necessary variables from the wff
 v = readwff(f)
-print v
+numVar = v[3]
+
+# Generate all possible assignment
+genObject = genassignment(int(numVar), '01')
+
+
+# Pop off one possible assignment
+print next(genObject)
+
+
+# Check if assignment is correct
+
+
+
+# Create output line
+
