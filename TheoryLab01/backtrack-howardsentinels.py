@@ -81,7 +81,7 @@ def verify(v, assignment):
             if DEBUG: print "Clause " + str(i) + " is unsatisfied"
             return -1
         # If track isnt -1, the clause must be unknown
-        elif track > 0 and track < len(curClause):
+        elif track >= 0 and track < len(curClause):
             if DEBUG: print "Clause " + str(i) + " is unknown"
             return 0
 
