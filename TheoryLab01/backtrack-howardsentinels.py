@@ -99,7 +99,6 @@ def output(v, satVal, exTime, assignment):
         correctness = 1
     else: 
         correctness = -1
-    outputFile = open('output.csv', 'w+')
     output = v[0] + ',' + v[3] + ',' + v[4] + ',' + v[1] + ','
     output += str(counter) + ',' + satVal + ',' + str(correctness) + ','
     output += str(exTime)
@@ -107,7 +106,11 @@ def output(v, satVal, exTime, assignment):
         for i in range(len(assignment)):
             output += ',' + assignment[i]
     
-    print output
+    
+    # print output
+    newFile = open('output-backtrack.csv', 'a')
+    print >> newFile, output
+    newFile.close()
 
 #####MAIN#####
 
@@ -123,6 +126,8 @@ else:
 
 
 f = open(FILENAME, "r")
+newF = open("output-backtrack.csv", "w")
+newF.close()
 
 while True:
     # Get tuple that contains all the necessary variables from the wff
@@ -140,6 +145,7 @@ while True:
 
     # Add one variable to stack (variable, value), value always goes 0 -> 1
     stack = []
+    dt = time.time()
     stack.append((1,0))
     
     # Go through stack until empty
@@ -189,12 +195,16 @@ while True:
         if t == 1:
             break
 
+    # End the execution time
+    dt = time.time() - dt
+    dt = 1E6*dt
+
     # Create output for wff
-##    output(v, satVal, 0.0, assignment)
+    output(v, satVal, round(dt,2), assignment)
     if DEBUG: 
         print "END STACK: "
         print stack
-    print "FINISHED: #" + v[0] + satVal + v[2] + " " + "".join(assignment)
+    #print "FINISHED: #" + v[0] + satVal + v[2] + " " + "".join(assignment)
 f.close()
 
 # Create output line
