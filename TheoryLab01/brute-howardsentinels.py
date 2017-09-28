@@ -97,7 +97,7 @@ def output(v, satVal, exTime, assignment):
         correctness = 1
     else: 
         correctness = -1
-    outputFile = open('output.csv', 'w+')
+    
     output = v[0] + ',' + v[3] + ',' + v[4] + ',' + v[1] + ','
     output += str(counter) + ',' + satVal + ',' + str(correctness) + ','
     output += str(exTime)
@@ -105,7 +105,10 @@ def output(v, satVal, exTime, assignment):
         for i in range(len(assignment)):
             output += ',' + assignment[i]
     
-    print output
+    # print output
+    newFile = open('output.csv', 'a')
+    print >> newFile, output
+    newFile.close()
 
 #####MAIN#####
 
@@ -121,6 +124,9 @@ else:
 
 
 f = open(FILENAME, "r")
+newF = open('output.csv', 'w')
+newF.close()
+
 
 while True:
     # Get tuple that contains all the necessary variables from the wff
