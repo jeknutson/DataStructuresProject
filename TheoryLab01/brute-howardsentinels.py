@@ -1,5 +1,7 @@
 #!/usr/bin/env python2.7
-
+# brute-howardsentinels.py
+# Lauren Tucker
+# Jacob Knutson
 import time
 import sys
 

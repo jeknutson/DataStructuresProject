@@ -145,9 +145,11 @@ def verify(v, assignment, stack):
         first = int(v[5][0][0])
         if first > 0:
             firstVal = 1
+            v[6] = firstVal
             assignment[abs(first)-1] = firstVal
         else:
             firstVal = 0
+            v[6] = firstVal
             assignment[abs(first)-1] = firstVal
         stack.append((abs(first),assignment[abs(first)-1]))
         return 0
@@ -171,11 +173,14 @@ def output(v, satVal, exTime, assignment):
     output += str(exTime)
     if satVal == "S":
         for i in range(len(assignment)):
-            output += ',' + assignment[i]
+            if assignment[i] != '9':
+                output += ',' + str(assignment[i])
+            else:
+                output += ',' + "-1"
     
     
     # print output
-    newFile = open('output-backtrack.csv', 'a')
+    newFile = open('output-2sat.csv', 'a')
     print >> newFile, output
     newFile.close()
 
@@ -193,7 +198,7 @@ else:
 
 
 f = open(FILENAME, "r")
-newF = open("output-backtrack.csv", "w")
+newF = open("output-2sat.csv", "w")
 newF.close()
 
 while True:
@@ -218,6 +223,7 @@ while True:
     else:
         firstVal = 0
         assignment[abs(first)-1] = firstVal
+    v.append(firstVal)
     dt = time.time()
     if DEBUG:
         print assignment
@@ -250,7 +256,7 @@ while True:
         # If unsatisfied, must flip last variable added to stack
         if t == -1:
             x = stack.pop()
-            if x[1] != firstVal:
+            if x[1] != v[6]:
                 satVal = "U"
                 break
             #  If value was 0, flip to 1 and push to stack
@@ -275,8 +281,7 @@ while True:
     dt = 1E6*dt
 
     # Create output for wff
-#    output(v, satVal, round(dt,2), assignment)
-    print v[0] + " " + v[2] + ":" + satVal
+    output(v, satVal, round(dt,2), assignment)
     if DEBUG: 
         print "END STACK: "
         print stack
