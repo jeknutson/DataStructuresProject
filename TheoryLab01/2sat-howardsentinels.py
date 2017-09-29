@@ -157,7 +157,7 @@ def verify(v, assignment, stack):
     # If it made it out of the for loop, all clauses must be true 
     return 1
 
-def output(v, satVal, exTime, assignment):
+def output(v, satVal, exTime, assignment, reg):
     counter = 0
     for i in range(len(v[5])):
         counter += len(v[5][i])	# adds number of literals in each clause
@@ -180,7 +180,7 @@ def output(v, satVal, exTime, assignment):
     
     
     # print output
-    newFile = open('output-2sat.csv', 'a')
+    newFile = open(reg, 'a')
     print >> newFile, output
     newFile.close()
 
@@ -196,19 +196,26 @@ if arg == '0':
 else:
   DEBUG = True
 
-
+numWiffs = 0
+numSat = 0
+numUnsat = 0
+numWithAnswers = 0
+numCorrect = 0
 f = open(FILENAME, "r")
-newF = open("output-2sat.csv", "w")
+FILENAME = FILENAME[:len(FILENAME)-4]
+reg = FILENAME + "-2sat.csv"
+newF = open(reg, "w")
 newF.close()
 
 while True:
     # Get tuple that contains all the necessary variables from the wff
     v = readwff(f)
-    
+
     # If false is returned, end of file is reached
     if v == False:
         break
 
+    numWiffs += 1
     numVar = v[3]
 
     # Create initial assignment string
@@ -281,11 +288,29 @@ while True:
     dt = 1E6*dt
 
     # Create output for wff
-    output(v, satVal, round(dt,2), assignment)
+    if v[2] == "S" or v[2] == "U":
+        numWithAnswers += 1
+    if satVal == "U":
+        numUnsat += 1
+        if v[2] == "U":
+            numCorrect += 1
+    elif satVal == "S":
+        numSat += 1
+        if v[2] == "S":
+            numCorrect += 1
+    output(v, satVal, round(dt,2), assignment, reg)
     if DEBUG: 
         print "END STACK: "
         print stack
-    #print "FINISHED: #" + v[0] + satVal + v[2] + " " + "".join(assignment)
-f.close()
 
-# Create output line
+# Final output line
+output2 = FILENAME + ",howardsentinels," + str(numWiffs)
+output2 += "," + str(numSat) + "," + str(numUnsat) + "," 
+output2 += str(numWithAnswers) + "," + str(numCorrect)
+
+newF = open(reg, 'a')
+print >> newF, output2
+newF.close()
+
+
+f.close()

@@ -88,7 +88,7 @@ def verify(v, assignment):
     # If it made it out of the for loop, all clauses must be true
     return True
 
-def output(v, satVal, exTime, assignment):
+def output(v, satVal, exTime, assignment, reg):
     counter = 0
     for i in range(len(v[5])):
         counter += len(v[5][i])	# adds number of literals in each clause
@@ -108,7 +108,7 @@ def output(v, satVal, exTime, assignment):
             output += ',' + assignment[i]
     
     # print output
-    newFile = open('output.csv', 'a')
+    newFile = open(reg, 'a')
     print >> newFile, output
     newFile.close()
 
@@ -124,9 +124,15 @@ if arg == '0':
 else:
   DEBUG = True
 
-
+numWiffs = 0
+numSat = 0
+numUnsat = 0
+numWithAnswers = 0
+numCorrect = 0
 f = open(FILENAME, "r")
-newF = open('output.csv', 'w')
+FILENAME = FILENAME[:len(FILENAME)-4]
+reg = FILENAME + "-brute.csv"
+newF = open(reg, 'w')
 newF.close()
 
 
@@ -139,7 +145,7 @@ while True:
         break
 
     numVar = v[3]
-
+    numWiffs += 1
     # Create generator object of all possible assignment
     genObject = genassignment(int(numVar), '01')
 
@@ -165,8 +171,26 @@ while True:
     dt = 1E6*dt
 
     # Create output for wff
-    output(v, satVal, round(dt,2), assignment)
+    if v[2] == "S" or v[2] == "U":
+        numWithAnswers += 1
+    if satVal == "U":
+        numUnsat += 1
+        if v[2] == "U":
+            numCorrect += 1
+    elif satVal == "S":
+        numSat += 1
+        if v[2] == "S":
+            numCorrect += 1
+    output(v, satVal, round(dt,2), assignment, reg)
+
+# Final output line
+output2 = FILENAME + ",howardsentinels," + str(numWiffs)
+output2 += "," + str(numSat) + "," + str(numUnsat) + ","
+output2 += str(numWithAnswers) + "," + str(numCorrect)
+
+newF = open(reg, 'a')
+print >> newF, output2
+newF.close()
 
 f.close()
 
-# Create output line

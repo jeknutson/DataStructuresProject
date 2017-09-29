@@ -88,7 +88,7 @@ def verify(v, assignment):
     # If it made it out of the for loop, all clauses must be true 
     return 1
 
-def output(v, satVal, exTime, assignment):
+def output(v, satVal, exTime, assignment, reg):
     counter = 0
     for i in range(len(v[5])):
         counter += len(v[5][i])	# adds number of literals in each clause
@@ -108,7 +108,7 @@ def output(v, satVal, exTime, assignment):
     
     
     # print output
-    newFile = open('output-backtrack.csv', 'a')
+    newFile = open(reg, 'a')
     print >> newFile, output
     newFile.close()
 
@@ -125,8 +125,15 @@ else:
   DEBUG = True
 
 
+numWiffs = 0
+numSat = 0
+numUnsat = 0
+numWithAnswers = 0
+numCorrect = 0
 f = open(FILENAME, "r")
-newF = open("output-backtrack.csv", "w")
+FILENAME = FILENAME[:len(FILENAME)-4]
+reg = FILENAME + "-backtrack.csv"
+newF = open(reg, "w")
 newF.close()
 
 while True:
@@ -138,7 +145,7 @@ while True:
         break
 
     numVar = v[3]
-
+    numWiffs += 1
     # Create initial assignment string
     assignment = list("9" * int(numVar))
     assignment[0] = "0"
@@ -200,11 +207,30 @@ while True:
     dt = 1E6*dt
 
     # Create output for wff
-    output(v, satVal, round(dt,2), assignment)
+    if v[2] == 'S' or v[2] == "U":
+        numWithAnswers += 1
+    if satVal == "U":
+        numUnsat += 1
+        if v[2] == "U":
+            numCorrect += 1
+    elif satVal == "S":
+        numSat += 1
+        if v[2] == "S":
+            numCorrect += 1
+    output(v, satVal, round(dt,2), assignment, reg)
     if DEBUG: 
         print "END STACK: "
         print stack
-    #print "FINISHED: #" + v[0] + satVal + v[2] + " " + "".join(assignment)
+
+# Final output line
+output2 = FILENAME + ",howardsentinels," + str(numWiffs)
+output2 += "," + str(numSat) + "," + str(numUnsat) + ","
+output2 += str(numWithAnswers) + "," + str(numCorrect)
+
+newF = open(reg, 'a')
+print >> newF, output2
+newF.close()
+
 f.close()
 
 # Create output line
